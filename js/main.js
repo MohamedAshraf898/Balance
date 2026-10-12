@@ -30,6 +30,11 @@
       });
   smoother && smoother.paused(true);
 
+  // touch: scroll on the JS thread so iOS/Android rubber-band overscroll and the
+  // collapsing address bar can't fight the pinned sections (jitter at top/bottom)
+  ScrollTrigger.config({ ignoreMobileResize: true });
+  if (!finePointer && ScrollTrigger.isTouch) ScrollTrigger.normalizeScroll(true);
+
   const scrollToTarget = (hash) => {
     const target = hash === "#home" || hash === "#top" ? 0 : $(hash);
     if (target === null) return;

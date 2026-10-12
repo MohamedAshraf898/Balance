@@ -25,7 +25,7 @@
 *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html { -webkit-text-size-adjust: 100%; }
-html, body { background: var(--black); }
+html, body { background: var(--black); overscroll-behavior: none; }
 body {
   font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   color: var(--white);
@@ -906,6 +906,8 @@ button { cursor: pointer; }
    ========================================================================== */
 @media (max-width: 900px) {
   :root { --u: 1px; --gutter: 20px; }
+  /* pinned stages use the visible viewport, not the address-bar-hidden one */
+  .loc__stage, .plist__sticky { height: 100svh; }
   .nav { display: none; }
   .burger { display: block; }
   .header { padding: 18px 20px; }
