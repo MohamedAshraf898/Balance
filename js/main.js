@@ -1270,6 +1270,110 @@
   }
 
   /* ---------------------------------------------------------------------
+     PROJECT PAGE (IVORY | Al Yasmin)
+     --------------------------------------------------------------------- */
+  if (PAGE === "project") {
+    const hero = $(".phx");
+    const night = $(".phx__img--night"), day = $(".phx__img--day");
+    gsap.set([".phx__lead", ".phx__note", ".phx__stat"], { autoAlpha: 0 });
+    gsap.set(night, { scale: 1.15 });
+
+    pageIntro = () => {
+      const lead = SplitText.create(".phx__lead", { type: "lines", mask: "lines" }).lines;
+      gsap.set([".phx__lead", ".phx__note"], { autoAlpha: 1 });
+      return gsap.timeline({ defaults: { ease: "expo.out" } })
+        .to(night, { scale: 1.04, duration: 2.6, ease: "power3.out" }, 0)
+        .from(lead, { yPercent: 110, duration: 1.2, stagger: 0.06 }, 0.5)
+        .from(".phx__note", { y: 20, autoAlpha: 0, duration: 1.1 }, 0.7)
+        .fromTo(".phx__stat", { y: 30, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 1.1, stagger: 0.1 }, 0.8);
+    };
+
+    /* hero (azimute): pinned; the cue fades, then the whole hero switches from dark to light mode —
+       night → day render, dark shade → daylight wash, white → ink text — with the same content */
+    const setTheme = (light) => document.body.classList.toggle("theme-light", light);
+    gsap.timeline({
+      defaults: { ease: "none" },
+      scrollTrigger: {
+        trigger: hero, start: "top top", end: () => "+=" + innerHeight * 0.9, pin: true, scrub: 1,
+        onUpdate: (st) => setTheme(st.progress > 0.32),
+        onLeave: () => setTheme(false),
+        onEnterBack: (st) => setTheme(st.progress > 0.32),
+        onLeaveBack: () => setTheme(false),
+      },
+    })
+      .to(".phx__cue", { autoAlpha: 0, duration: 0.09 }, 0)
+      .to(day, { opacity: 1, duration: 0.5, ease: "power1.inOut" }, 0.09)
+      .to(".phx__shade:not(.phx__shade--light)", { opacity: 0, duration: 0.5, ease: "power1.inOut" }, 0.09)
+      .to(".phx__shade--light", { opacity: 1, duration: 0.5, ease: "power1.inOut" }, 0.09)
+      .to(hero, { "--ink": "#141414", duration: 0.4, ease: "power1.inOut" }, 0.16)
+      .to([night, day], { scale: 1, duration: 0.7 }, 0.09)
+      .to({}, { duration: 0.3 }, 0.7); // hold the light frame before the page moves on
+
+    // About + warranties reveals (split after fonts so the lines are final)
+    (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => {
+      const tLines = SplitText.create(".pabout__title", { type: "lines", mask: "lines" }).lines;
+      gsap.from(tLines, { yPercent: 110, duration: 1.3, ease: "expo.out", stagger: 0.1, scrollTrigger: { trigger: ".pabout__title", start: "top 85%" } });
+      $$(".pabout__text p").forEach((p) => {
+        const l = SplitText.create(p, { type: "lines", mask: "lines" }).lines;
+        gsap.from(l, { yPercent: 110, duration: 1.1, ease: "expo.out", stagger: 0.05, scrollTrigger: { trigger: p, start: "top 88%" } });
+      });
+      const wChars = SplitText.create(".pwar__title", { type: "chars", mask: "chars" }).chars;
+      gsap.from(wChars, { yPercent: 110, duration: 1.1, ease: "expo.out", stagger: 0.035, scrollTrigger: { trigger: ".pwar__title", start: "top 85%" } });
+      const pTitle = SplitText.create(".ploc__title", { type: "chars", mask: "chars" }).chars;
+      gsap.from(pTitle, { yPercent: 110, duration: 1.1, ease: "expo.out", stagger: 0.03, scrollTrigger: { trigger: ".ploc__title", start: "top 85%" } });
+    });
+    gsap.from(".pabout__label", { y: 16, autoAlpha: 0, duration: 1, ease: "expo.out", scrollTrigger: { trigger: ".pabout", start: "top 80%" } });
+    gsap.fromTo(".pwarm__bg img", { yPercent: -5 }, { yPercent: 5, ease: "none", scrollTrigger: { trigger: ".pwarm", start: "top bottom", end: "bottom top", scrub: true } });
+    gsap.from(".pwar__line", { scaleY: 0, duration: 1.4, ease: "expo.inOut", scrollTrigger: { trigger: ".pwar__line", start: "top 85%" } });
+    gsap.from(".pwar__text", { y: 24, autoAlpha: 0, duration: 1.1, ease: "expo.out", scrollTrigger: { trigger: ".pwar__text", start: "top 88%" } });
+    gsap.from(".wcell", {
+      y: 40, autoAlpha: 0, duration: 1.1, ease: "expo.out", stagger: { each: 0.07, grid: [2, 4] },
+      scrollTrigger: { trigger: ".pwar__grid", start: "top 82%" },
+    });
+    $$(".wcell__num").forEach((n) => { // years count up
+      const to = +n.dataset.to, o = { v: 0 };
+      gsap.to(o, { v: to, duration: 1.6, ease: "power2.out", onUpdate: () => (n.textContent = Math.round(o.v)), scrollTrigger: { trigger: n, start: "top 90%" } });
+    });
+
+    /* exterior: the stage pins and the photo opens from the card's thumbnail slot to full bleed */
+    const ext = $(".pext__stage"), photo = $(".pext__photo"), thumb = $(".pext__thumb");
+    const thumbClip = () => {
+      const st = ext.getBoundingClientRect(), t = thumb.getBoundingClientRect();
+      const top = t.top - st.top, left = t.left - st.left;
+      return `inset(${top}px ${st.width - left - t.width}px ${st.height - top - t.height}px ${left}px)`;
+    };
+    gsap.set(photo, { clipPath: thumbClip() });
+    gsap.timeline({
+      defaults: { ease: "none" },
+      scrollTrigger: { trigger: ext, start: "top top", end: () => "+=" + innerHeight * 1.2, pin: true, scrub: 1, invalidateOnRefresh: true },
+    })
+      .fromTo(photo, { clipPath: thumbClip }, { clipPath: "inset(0px 0px 0px 0px)", duration: 1, ease: "power2.inOut", immediateRender: false }, 0.1)
+      .fromTo(photo, { scale: 1.12 }, { scale: 1, duration: 1.1 }, 0)
+      .to([".pext__title", ".pext__text"], { autoAlpha: 0, y: -30, duration: 0.3 }, 0.05)
+      .to(".pext__card", { borderColor: "rgba(253,253,253,0)", duration: 0.4 }, 0.3);
+    gsap.from(".pext__card", { y: 60, autoAlpha: 0, duration: 1.3, ease: "expo.out", scrollTrigger: { trigger: ".pext", start: "top 70%" } });
+    gsap.from(".pext__label", { x: -20, autoAlpha: 0, duration: 1, ease: "expo.out", scrollTrigger: { trigger: ".pext", start: "top 80%" } });
+
+    /* location: the line draws, then the map pins and its two panels swap */
+    gsap.from(".ploc__line", { scaleY: 0, duration: 1.6, ease: "expo.inOut", scrollTrigger: { trigger: ".ploc__line", start: "top 85%" } });
+    const dotsLine = $(".ploc__dots i"), dots = $$(".ploc__dots span");
+    gsap.timeline({
+      defaults: { ease: "none" },
+      scrollTrigger: {
+        trigger: ".ploc__stage", start: "top top", end: () => "+=" + innerHeight * 1.2, pin: true, scrub: 1,
+        onUpdate: (st) => {
+          dotsLine.style.setProperty("--p", st.progress.toFixed(3));
+          dots.forEach((d, k) => d.classList.toggle("is-on", (st.progress >= 0.5 ? 1 : 0) === k));
+        },
+      },
+    })
+      .fromTo(".ploc__map img", { scale: 1.12 }, { scale: 1, duration: 1 }, 0)
+      .fromTo(".ploc__panel", { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.2, ease: "power2.out" }, 0)
+      .to(".ploc__slide--a", { autoAlpha: 0, y: -24, duration: 0.15, ease: "power2.in" }, 0.45)
+      .fromTo(".ploc__slide--b", { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.15, ease: "power2.out" }, 0.55);
+  }
+
+  /* ---------------------------------------------------------------------
      Footer
      --------------------------------------------------------------------- */
   gsap.from([".footer__title", ".footer__links li"], {
