@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Balance</title>
+  <meta name="description" content="Balance — Technology, Sustainability, Investment, Creativity.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@100..900&display=swap"
+    rel="stylesheet">
+  <link rel="preload" as="image" href="assets/img/hero-flame.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="is-loading" data-page="home">
+
+  <!-- Preloader -->
+  <div class="loader" aria-hidden="true">
+    <div class="loader__mark"><img src="assets/img/balance-wordmark.png" alt=""></div>
+    <!-- <div class="loader__bar"><span></span></div>
+    <div class="loader__count"><span class="loader__num">0</span>%</div> -->
+  </div>
+
+  <!-- Cursor -->
+  <div class="cursor" aria-hidden="true">
+    <div class="cursor__dot"></div>
+    <div class="cursor__ring"><span class="cursor__label">Drag</span></div>
+  </div>
+
+  <!-- Header -->
+  <header class="header">
+    <a href="#home" class="header__logo" data-link aria-label="Balance — home">
+      <img src="assets/img/balance-wordmark.png" alt="Balance" width="141" height="30">
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="#home" class="nav__link" data-link><span data-text="Home">Home</span></a>
+      <a href="#about" class="nav__link" data-link><span data-text="About us">About us</span></a>
+      <a href="projects.html" class="nav__link" data-link><span data-text="Our Projects">Our Projects</span></a>
+      <a href="location.html" class="nav__link" data-link><span data-text="Our Locations">Our Locations</span></a>
+    </nav>
+    <button class="burger" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
+  </header>
+
+  <!-- Mobile menu -->
+  <div class="menu" aria-hidden="true">
+    <a href="#home" data-link>Home</a>
+    <a href="#about" data-link>About us</a>
+    <a href="projects.html" data-link>Our Projects</a>
+    <a href="location.html" data-link>Our Locations</a>
+  </div>
+
+  <div id="smooth-wrapper">
+    <div id="smooth-content">
+      <main>
+
+        <!-- HERO -->
+        <section class="hero" id="home" data-fire>
+          <div class="hero__media">
+            <div class="hero__flame">
+              <img class="flame flame--blur" src="assets/img/hero-flame.png" alt="" width="1672" height="941">
+              <img class="flame flame--sharp" src="assets/img/hero-flame.png" alt="" width="1672" height="941">
+            </div>
+          </div>
+          <canvas class="hero__fire" aria-hidden="true"></canvas>
+          <div class="hero__content">
+            <h1 class="hero__title">Lorem Ipsumlorem Ipsumlorem Ipsumlorem</h1>
+            <p class="hero__text">Lorem&nbsp; Ipsumlorem Ipsumlorem Ipsumlorem Ipsumlorem Ipsumlorem Ipsumlorem Ipsum
+              Ipsumlorem Ipsumlorem Ipsumlorem Ipsumlorem Ipsu</p>
+          </div>
+          <div class="hero__bottom">
+            <p class="hero__tag">lorem ipsum</p>
+            <a href="#contact" class="btn-pill magnetic" data-link><span class="btn-pill__fill"></span><span
+                class="btn-pill__text">contact us</span></a>
+          </div>
+        </section>
+
+        <!-- LOGOS -->
+        <section class="logos" aria-label="Our brands" data-cursor="Drag">
+          <div class="logos__band"></div>
+          <div class="logos__viewport">
+            <div class="logos__track">
+              <div class="logos__set">
+                <img src="assets/img/logo-nrouj.png" alt="Nrouj" class="logo logo--nrouj">
+                <img src="assets/img/logo-arabic.png" alt="" class="logo logo--arabic">
+                <img src="assets/img/logo-zahya.png" alt="Zahya" class="logo logo--zahya">
+                <img src="assets/img/logo-alnada.png" alt="Alnada" class="logo logo--alnada">
+                <img src="assets/img/logo-olyx.png" alt="OLYX" class="logo logo--olyx">
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- PILLARS (scroll-driven, modelled on cominvi.com.mx "Minerals") -->
+        <section class="pillars" id="pillars" aria-label="Balance 4 pillars">
+          <!-- accessible copy; the visual stage below is decorative -->
+          <h2 class="sr-only">Logo concept — Balance 4 pillars</h2>
+          <ul class="sr-only">
+            <li>Technology</li>
+            <li>Sustainability</li>
+            <li>Investment</li>
+            <li>Creativity</li>
+          </ul>
+
+          <div class="pillars__pin" aria-hidden="true">
+            <div class="pillars__glow"><img src="assets/img/about-bg.png" alt=""></div>
+
+            <div class="chips">
+              <span class="chip">S.01</span>
+              <span class="chip chip--solid">LOGO CONCEPT</span>
+            </div>
+
+            <div class="pillars__grid">
+              <!-- left: list -->
+              <div class="pillars__left">
+                <p class="mono pillars__kicker">balance 4 pillars</p>
+                <ul class="pillars__list">
+                  <li data-step="0" class="is-active">Technology</li>
+                  <li data-step="1">Sustainability</li>
+                  <li data-step="2">Investment</li>
+                  <li data-step="3">Creativity</li>
+                </ul>
+              </div>
+
+              <!-- center: dial + spinning pattern -->
+              <div class="pillars__center">
+                <div class="pillars__stage">
+                  <img class="dial dial--base" src="assets/svg/circle.svg" alt="" width="723" height="723">
+                  <img class="dial dial--fill" src="assets/svg/circle.svg" alt="" width="723" height="723">
+                  <div class="spinner">
+                    <div class="spinner__card">
+                      <div class="spinner__face spinner__face--front"><img src="assets/img/pillar-technology.png"
+                          alt=""></div>
+                      <div class="spinner__face spinner__face--back"><img src="assets/img/pillar-sustainability.png"
+                          alt=""></div>
+                    </div>
+                    <div class="spinner__shadow"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- right: odometer ticker -->
+              <div class="pillars__right">
+                <div class="ticker mono">
+                  <span class="ticker__col"><span class="ticker__track">
+                      <span>TE</span><span>SU</span><span>IN</span><span>CR</span>
+                    </span></span>
+                  <span class="ticker__bracket">[</span>
+                  <span class="ticker__col"><span class="ticker__track">
+                      <span>#01</span><span>#02</span><span>#03</span><span>#04</span>
+                    </span></span>
+                  <span class="ticker__bracket">]</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ABOUT + PROJECTS (shared warm background) -->
+        <div class="warm">
+          <div class="warm__bg"><img src="assets/img/about-bg.png" alt=""></div>
+          <div class="warm__fade"></div>
+
+          <section class="about" id="about">
+            <h2 class="about__title">ABOUT US</h2>
+            <p class="about__text">Lorem Ipsumlorem Ipsumlorem Ipsumlorem Ipsumlorem Ipsumlorem Ipsumlorem Ipsumlorem
+              Ipsumlorem Ipsumlorem Ipsumlorem Ipsumlorem Ipsumlorem Ipsumlorem Ipsumlorem Ipsumlorem Ipsumlorem
+              Ipsumlorem Ipsumlorem Ipsumlorem Ipsum</p>
+          </section>
+
+          <section class="projects" id="projects">
+            <div class="projects__pin">
+              <h2 class="label">OUR PROJECTS</h2>
+              <div class="carousel" data-cursor="Drag">
+                <div class="carousel__card" data-title="Project 01"></div>
+                <div class="carousel__card" data-title="Project 02"></div>
+                <div class="carousel__card" data-title="Project 03"></div>
+                <div class="carousel__card" data-title="Project 04"></div>
+                <div class="carousel__card" data-title="Project 05"></div>
+              </div>
+              <div class="projects__progress mono" aria-hidden="true">
+                <span class="projects__count">01</span>
+                <span class="projects__bar"><i></i></span>
+                <span class="projects__total">05</span>
+              </div>
+            </div>
+          </section>
+
+          <h2 class="label label--locations" id="locations">LOCATIONS</h2>
+        </div>
+
+        <!-- LOCATIONS -->
+        <section class="locations" aria-label="Locations map">
+          <div class="map">
+            <img class="map__img" src="assets/img/map.png" alt="Map of Balance project locations" width="1823"
+              height="863">
+            <button class="pin" style="--x:63.42%;--y:45.83%" data-group="0" aria-label="KAM Project"><img
+                src="assets/svg/location.svg" alt=""><span class="pin__tip">KAM PROJECT</span></button>
+            <button class="pin" style="--x:71.8%;--y:51.78%" data-group="0" aria-label="KAM Project"><img
+                src="assets/svg/location.svg" alt=""><span class="pin__tip">KAM PROJECT</span></button>
+            <button class="pin" style="--x:68.09%;--y:75.22%" data-group="1" aria-label="KAM City"><img
+                src="assets/svg/location-alt.svg" alt=""><span class="pin__tip">KAM CITY</span></button>
+            <button class="pin" style="--x:75.65%;--y:63.24%" data-group="1" aria-label="KAM City"><img
+                src="assets/svg/location-alt.svg" alt=""><span class="pin__tip">KAM CITY</span></button>
+            <button class="pin" style="--x:74.0%;--y:36.25%" data-group="2" aria-label="KAM Apartments"><img
+                src="assets/svg/location-alt.svg" alt=""><span class="pin__tip">KAM APARTMEN</span></button>
+            <button class="pin" style="--x:82.32%;--y:78.63%" data-group="2" aria-label="KAM Apartments"><img
+                src="assets/svg/location-alt.svg" alt=""><span class="pin__tip">KAM APARTMEN</span></button>
+          </div>
+          <div class="map__card">
+            <ul class="map__list">
+              <li data-group="0">KAM PROJECT</li>
+              <li data-group="1">KAM CITY</li>
+              <li data-group="2">KAM APARTMEN</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="footer" id="contact">
+          <div class="footer__cols">
+            <div class="footer__info">
+              <div class="footer__block">
+                <h3 class="footer__title">NAVIGATION</h3>
+                <ul class="footer__links">
+                  <li><a href="#home" data-link>Home</a></li>
+                  <li><a href="#about" data-link>about us</a></li>
+                  <li><a href="projects.html" data-link>Our Projects</a></li>
+                  <li><a href="location.html" data-link>Our Locations</a></li>
+                </ul>
+              </div>
+              <div class="footer__block">
+                <h3 class="footer__title">CONTACT</h3>
+                <ul class="footer__links footer__links--contact">
+                  <li>EMAIL: ...................</li>
+                  <li>WHATSAPP: ...................</li>
+                </ul>
+              </div>
+            </div>
+
+            <form class="form" novalidate>
+              <h3 class="form__title">Balance Company Profile</h3>
+              <p class="form__sub">Lorem ipsumLorem ipsumLorem ipsumLorem ipsum</p>
+              <label class="field">
+                <span class="field__label">NAME</span>
+                <input type="text" name="name" autocomplete="name" required>
+                <span class="field__line"></span>
+              </label>
+              <label class="field">
+                <span class="field__label">EMAIL</span>
+                <input type="email" name="email" autocomplete="email" required>
+                <span class="field__line"></span>
+              </label>
+              <div class="form__actions">
+                <button type="submit" class="btn-outline" value="callback"><span class="btn-outline__fill"></span><span
+                    class="btn-outline__text">REQUEST A CALL BACK</span></button>
+                <button type="submit" class="btn-outline" value="appointment"><span
+                    class="btn-outline__fill"></span><span class="btn-outline__text">BOOK AN APOINTMENT</span></button>
+              </div>
+              <p class="form__note">No spam, no obligation. your information is safe</p>
+            </form>
+          </div>
+
+          <div class="footer__mark">
+            <div class="footer__mark-inner">
+              <img src="assets/img/balance-wordmark.png" alt="Balance" width="1352" height="285">
+              <span class="footer__mark-reveal" aria-hidden="true"></span>
+            </div>
+          </div>
+        </footer>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollSmoother.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/SplitText.min.js"></script>
+  <script src="js/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Location — Balance</title>
+  <meta name="description" content="Balance — Technology, Sustainability, Investment, Creativity.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@100..900&display=swap"
+    rel="stylesheet">
+  <link rel="preload" as="image" href="assets/img/map-loc.webp">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="is-loading" data-page="location">
+
+  <!-- Preloader -->
+  <div class="loader" aria-hidden="true">
+    <div class="loader__mark"><img src="assets/img/balance-wordmark.png" alt=""></div>
+    <!-- <div class="loader__bar"><span></span></div>
+    <div class="loader__count"><span class="loader__num">0</span>%</div> -->
+  </div>
+
+  <!-- Cursor -->
+  <div class="cursor" aria-hidden="true">
+    <div class="cursor__dot"></div>
+    <div class="cursor__ring"><span class="cursor__label">Drag</span></div>
+  </div>
+
+  <!-- Header -->
+  <header class="header">
+    <a href="index.html" class="header__logo" data-link aria-label="Balance — home">
+      <img src="assets/img/balance-wordmark.png" alt="Balance" width="141" height="30">
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="index.html" class="nav__link" data-link><span data-text="Home">Home</span></a>
+      <a href="index.html#about" class="nav__link" data-link><span data-text="About us">About us</span></a>
+      <a href="projects.html" class="nav__link" data-link><span data-text="Our Projects">Our Projects</span></a>
+      <a href="location.html" class="nav__link is-active" aria-current="page" data-link><span
+          data-text="Our Locations">Our Locations</span></a>
+    </nav>
+    <button class="burger" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
+  </header>
+
+  <!-- Mobile menu -->
+  <div class="menu" aria-hidden="true">
+    <a href="index.html" data-link>Home</a>
+    <a href="index.html#about" data-link>About us</a>
+    <a href="projects.html" data-link>Our Projects</a>
+    <a href="location.html" data-link>Our Locations</a>
+  </div>
+
+  <div id="smooth-wrapper">
+    <div id="smooth-content">
+      <main>
+        <section class="loc" aria-label="Location">
+          <div class="loc__stage">
+            <div class="loc__scene">
+              <div class="loc__camera">
+                <div class="loc__map">
+                  <img class="loc__map-img" src="assets/img/map-loc.webp" decoding="async"
+                    alt="Map of Riyadh with Balance projects" width="1823" height="863">
+                  <div class="loc__anchors" aria-hidden="true">
+                    <i class="loc__anchor" data-pin="riyadh" style="--x:70%;--y:46%"></i>
+                    <i class="loc__anchor" data-pin="diriyah" style="--x:55%;--y:44%"></i>
+                    <i class="loc__anchor" data-pin="wadi-hanifah" style="--x:57%;--y:63%"></i>
+                    <i class="loc__anchor" data-pin="to-makkah" style="--x:22%;--y:48%"></i>
+                    <i class="loc__anchor" data-pin="kafd" style="--x:75%;--y:31%"></i>
+                    <i class="loc__anchor" data-pin="kingdom-centre" style="--x:70%;--y:50%"></i>
+                    <i class="loc__anchor" data-pin="al-faisaliah" style="--x:74.5%;--y:59%"></i>
+                    <i class="loc__anchor" data-pin="boulevard" style="--x:62%;--y:34%"></i>
+                    <i class="loc__anchor" data-pin="masmak" style="--x:68%;--y:75%"></i>
+                    <i class="loc__anchor" data-pin="stadium" style="--x:88%;--y:58%"></i>
+                    <i class="loc__anchor" data-pin="al-nada" style="--x:73%;--y:23%"></i>
+                    <i class="loc__anchor" data-pin="ivory" style="--x:65%;--y:26%"></i>
+                    <i class="loc__anchor" data-pin="zahia" style="--x:77%;--y:41%"></i>
+                    <i class="loc__anchor" data-pin="olyx" style="--x:69%;--y:55%"></i>
+                    <i class="loc__anchor" data-pin="al-murooj" style="--x:67%;--y:40%"></i>
+                    <i class="loc__anchor" data-pin="al-rabwah-1" style="--x:79%;--y:63%"></i>
+                    <i class="loc__anchor" data-pin="al-rabwah-2" style="--x:83%;--y:68%"></i>
+                    <i class="loc__anchor" data-pin="maad-mekkah" style="--x:7%;--y:26%"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="loc__fog" aria-hidden="true">
+              <span class="cloud c1"></span><span class="cloud c2"></span><span class="cloud c3"></span><span
+                class="cloud c4"></span>
+              <span class="cloud c5"></span><span class="cloud c6"></span><span class="cloud c7"></span>
+            </div>
+            <div class="loc__vignette" aria-hidden="true"></div>
+            <div class="loc__pins">
+              <div class="lpin lpin--label lpin--hidden" data-pin="riyadh" data-reveal="0.15"><span
+                  class="lpin__content"><span class="lpin__bg"></span><span class="lpin__label">Riyadh</span></span>
+              </div>
+              <div class="lpin lpin--label lpin--hidden" data-pin="diriyah" data-reveal="0.15"><span
+                  class="lpin__content"><span class="lpin__bg"></span><span class="lpin__label">Diriyah</span></span>
+              </div>
+              <div class="lpin lpin--label lpin--hidden" data-pin="wadi-hanifah" data-reveal="0.15"><span
+                  class="lpin__content"><span class="lpin__bg"></span><span class="lpin__label">Wadi
+                    Hanifah</span></span></div>
+              <div class="lpin lpin--label lpin--hidden" data-pin="to-makkah" data-reveal="0.15"><span
+                  class="lpin__content"><span class="lpin__bg"></span><span class="lpin__label">Makkah
+                    Road</span></span></div>
+              <a class="lpin lpin--secondary lpin--hidden" href="#kafd" data-pin="kafd" data-reveal="0.28"
+                aria-label="KAFD"><span class="lpin__content"><span class="lpin__bg"></span><span
+                    class="lpin__label">KAFD</span></span></a>
+              <a class="lpin lpin--secondary lpin--hidden" href="#kingdom-centre" data-pin="kingdom-centre"
+                data-reveal="0.28" aria-label="Kingdom Centre"><span class="lpin__content"><span
+                    class="lpin__bg"></span><span class="lpin__label">Kingdom Centre</span></span></a>
+              <a class="lpin lpin--secondary lpin--hidden" href="#al-faisaliah" data-pin="al-faisaliah"
+                data-reveal="0.28" aria-label="Al Faisaliah Tower"><span class="lpin__content"><span
+                    class="lpin__bg"></span><span class="lpin__label">Al Faisaliah Tower</span></span></a>
+              <a class="lpin lpin--secondary lpin--hidden" href="#boulevard" data-pin="boulevard" data-reveal="0.28"
+                aria-label="Boulevard City"><span class="lpin__content"><span class="lpin__bg"></span><span
+                    class="lpin__label">Boulevard City</span></span></a>
+              <a class="lpin lpin--secondary lpin--hidden" href="#masmak" data-pin="masmak" data-reveal="0.28"
+                aria-label="Al Masmak Fortress"><span class="lpin__content"><span class="lpin__bg"></span><span
+                    class="lpin__label">Al Masmak Fortress</span></span></a>
+              <a class="lpin lpin--secondary lpin--hidden" href="#stadium" data-pin="stadium" data-reveal="0.28"
+                aria-label="King Fahd Stadium"><span class="lpin__content"><span class="lpin__bg"></span><span
+                    class="lpin__label">King Fahd Stadium</span></span></a>
+              <a class="lpin lpin--primary lpin--hidden" href="#al-nada" data-pin="al-nada" data-reveal="0.42"
+                aria-label="Al Nada"><span class="lpin__content"><span class="lpin__bg"></span><span
+                    class="lpin__preview"><img src="assets/img/logo-alnada.png" alt=""></span><span
+                    class="lpin__label">Al Nada</span></span></a>
+              <a class="lpin lpin--primary lpin--hidden" href="#ivory" data-pin="ivory" data-reveal="0.42"
+                aria-label="IVORY | Al Yasmin"><span class="lpin__content"><span class="lpin__bg"></span><span
+                    class="lpin__preview"><img src="assets/img/logo-ivory.png" alt=""></span><span
+                    class="lpin__label">IVORY | Al Yasmin</span></span></a>
+              <a class="lpin lpin--primary lpin--hidden" href="#zahia" data-pin="zahia" data-reveal="0.42"
+                aria-label="ZAHIA | Al Mughrazat"><span class="lpin__content"><span class="lpin__bg"></span><span
+                    class="lpin__preview"><img src="assets/img/logo-zahya.png" alt=""></span><span
+                    class="lpin__label">ZAHIA | Al Mughrazat</span></span></a>
+              <a class="lpin lpin--primary lpin--hidden" href="#olyx" data-pin="olyx" data-reveal="0.42"
+                aria-label="OLYX | Al Olaya"><span class="lpin__content"><span class="lpin__bg"></span><span
+                    class="lpin__preview"><img src="assets/img/logo-olyx.png" alt=""></span><span
+                    class="lpin__label">OLYX | Al Olaya</span></span></a>
+              <a class="lpin lpin--primary lpin--hidden" href="#al-murooj" data-pin="al-murooj" data-reveal="0.42"
+                aria-label="Balance Al Murooj"><span class="lpin__content"><span class="lpin__bg"></span><span
+                    class="lpin__preview"><img src="assets/img/logo-nrouj.png" alt=""></span><span
+                    class="lpin__label">Balance Al Murooj</span></span></a>
+              <a class="lpin lpin--primary lpin--hidden" href="#al-rabwah-1" data-pin="al-rabwah-1" data-reveal="0.42"
+                aria-label="Balance Al Rabwah 1"><span class="lpin__content"><span class="lpin__bg"></span><span
+                    class="lpin__preview"><img src="assets/img/logo-coltine.png" alt=""></span><span
+                    class="lpin__label">Balance Al Rabwah 1</span></span></a>
+              <a class="lpin lpin--primary lpin--hidden" href="#al-rabwah-2" data-pin="al-rabwah-2" data-reveal="0.42"
+                aria-label="Balance Al Rabwah 2"><span class="lpin__content"><span class="lpin__bg"></span><span
+                    class="lpin__preview"><img src="assets/img/logo-coltine.png" alt=""></span><span
+                    class="lpin__label">Balance Al Rabwah 2</span></span></a>
+              <a class="lpin lpin--primary lpin--hidden" href="#maad-mekkah" data-pin="maad-mekkah" data-reveal="0.42"
+                aria-label="MAAD MEKKAH"><span class="lpin__content"><span class="lpin__bg"></span><span
+                    class="lpin__preview"><img src="assets/img/logo-arabic.png" alt=""></span><span
+                    class="lpin__label">MAAD MEKKAH</span></span></a>
+            </div>
+            <h1 class="loc__title">Location</h1>
+            <a class="loc__arrow" href="#explore" aria-label="Scroll down">
+              <span class="loc__arrow-btn" aria-hidden="true"><svg viewBox="0 0 10 15" width="10" height="15">
+                  <path d="M5 0v13.5M1 9.5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.2" />
+                </svg></span>
+              <span class="loc__arrow-text">Scroll down</span>
+            </a>
+            <div class="loc__noise" aria-hidden="true"></div>
+          </div>
+          <span class="loc__explore" id="explore" aria-hidden="true"></span>
+          <nav class="loc__crumbs" aria-label="Breadcrumb">
+            <ol>
+              <li><a href="index.html">Home</a><span class="loc__crumbs-div" aria-hidden="true">/</span></li>
+              <li aria-current="page">Location</li>
+            </ol>
+          </nav>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- pin side panels -->
+  <div class="lmodal lmodal--poi" id="kafd" role="dialog" aria-modal="true" aria-label="KAFD" aria-hidden="true">
+    <div class="lmodal__panel">
+      <button class="lmodal__close" type="button">Close</button>
+      <div class="lpoi">
+        <div></div>
+        <div class="lpoi__top">
+          <div class="lpoi__image"><span class="lpoi__ph"></span></div>
+          <p class="lpoi__title" role="heading" aria-level="2">KAFD</p>
+        </div>
+        <p class="lpoi__desc">King Abdullah Financial District — Riyadh’s glass-and-steel business quarter, with towers,
+          a monorail and landscaped wadi walks at its heart.</p>
+      </div>
+    </div>
+  </div>
+  <div class="lmodal lmodal--poi" id="kingdom-centre" role="dialog" aria-modal="true" aria-label="Kingdom Centre"
+    aria-hidden="true">
+    <div class="lmodal__panel">
+      <button class="lmodal__close" type="button">Close</button>
+      <div class="lpoi">
+        <div></div>
+        <div class="lpoi__top">
+          <div class="lpoi__image"><span class="lpoi__ph"></span></div>
+          <p class="lpoi__title" role="heading" aria-level="2">Kingdom Centre</p>
+        </div>
+        <p class="lpoi__desc">The city’s best-known silhouette: a 302-metre tower crowned by a sky bridge, with a luxury
+          mall and hotel at its base on King Fahd Road.</p>
+      </div>
+    </div>
+  </div>
+  <div class="lmodal lmodal--poi" id="al-faisaliah" role="dialog" aria-modal="true" aria-label="Al Faisaliah Tower"
+    aria-hidden="true">
+    <div class="lmodal__panel">
+      <button class="lmodal__close" type="button">Close</button>
+      <div class="lpoi">
+        <div></div>
+        <div class="lpoi__top">
+          <div class="lpoi__image"><span class="lpoi__ph"></span></div>
+          <p class="lpoi__title" role="heading" aria-level="2">Al Faisaliah Tower</p>
+        </div>
+        <p class="lpoi__desc">Riyadh’s first skyscraper, recognisable by its golden glass sphere, home to offices, a
+          hotel and fine dining above the Olaya skyline.</p>
+      </div>
+    </div>
+  </div>
+  <div class="lmodal lmodal--poi" id="boulevard" role="dialog" aria-modal="true" aria-label="Boulevard City"
+    aria-hidden="true">
+    <div class="lmodal__panel">
+      <button class="lmodal__close" type="button">Close</button>
+      <div class="lpoi">
+        <div></div>
+        <div class="lpoi__top">
+          <div class="lpoi__image"><span class="lpoi__ph"></span></div>
+          <p class="lpoi__title" role="heading" aria-level="2">Boulevard City</p>
+        </div>
+        <p class="lpoi__desc">An open-air entertainment district of promenades, restaurants, theatres and seasonal
+          events — the centre of Riyadh’s nightlife.</p>
+      </div>
+    </div>
+  </div>
+  <div class="lmodal lmodal--poi" id="masmak" role="dialog" aria-modal="true" aria-label="Al Masmak Fortress"
+    aria-hidden="true">
+    <div class="lmodal__panel">
+      <button class="lmodal__close" type="button">Close</button>
+      <div class="lpoi">
+        <div></div>
+        <div class="lpoi__top">
+          <div class="lpoi__image"><span class="lpoi__ph"></span></div>
+          <p class="lpoi__title" role="heading" aria-level="2">Al Masmak Fortress</p>
+        </div>
+        <p class="lpoi__desc">A clay-and-mudbrick fortress in old Riyadh, now a museum telling the story of the city’s
+          founding.</p>
+      </div>
+    </div>
+  </div>
+  <div class="lmodal lmodal--poi" id="stadium" role="dialog" aria-modal="true" aria-label="King Fahd Stadium"
+    aria-hidden="true">
+    <div class="lmodal__panel">
+      <button class="lmodal__close" type="button">Close</button>
+      <div class="lpoi">
+        <div></div>
+        <div class="lpoi__top">
+          <div class="lpoi__image"><span class="lpoi__ph"></span></div>
+          <p class="lpoi__title" role="heading" aria-level="2">King Fahd Stadium</p>
+        </div>
+        <p class="lpoi__desc">The national stadium, crowned by its iconic tensile-fabric roof, host to football’s
+          biggest matches and major concerts.</p>
+      </div>
+    </div>
+  </div>
+  <div class="lmodal lmodal--project" id="al-nada" role="dialog" aria-modal="true" aria-label="Al Nada"
+    aria-hidden="true">
+    <div class="lmodal__panel">
+      <button class="lmodal__close" type="button">Close</button>
+      <div class="lproj">
+        <div class="lproj__image lmodal__side-image"><span class="lproj__ph"><img src="assets/img/logo-alnada.png"
+              alt=""></span></div>
+        <div class="lproj__content">
+          <p class="lproj__title" role="heading" aria-level="2">Al Nada</p>
+          <div class="lproj__top">
+            <span class="lproj__tag">Residences</span>
+            <img class="lproj__logo" src="assets/img/logo-alnada.png" alt="Al Nada logo">
+          </div>
+          <p class="lproj__tagline">Smart living, quietly refined</p>
+          <div class="lproj__bottom">
+            <p>The residences feature smart home systems, concealed central air conditioning, parking spaces, and
+              security cameras. The development includes air-conditioned corridors, with private internal elevators
+              available in selected units.</p>
+            <a class="lproj__link" href="projects.html#project-1">View project <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="lmodal lmodal--project" id="ivory" role="dialog" aria-modal="true" aria-label="IVORY | Al Yasmin"
+    aria-hidden="true">
+    <div class="lmodal__panel">
+      <button class="lmodal__close" type="button">Close</button>
+      <div class="lproj">
+        <div class="lproj__image lmodal__side-image"><span class="lproj__ph"><img src="assets/img/logo-ivory.png"
+              alt=""></span></div>
+        <div class="lproj__content">
+          <p class="lproj__title" role="heading" aria-level="2">IVORY | Al Yasmin</p>
+          <div class="lproj__top">
+            <span class="lproj__tag">Residences</span>
+            <img class="lproj__logo" src="assets/img/logo-ivory.png" alt="IVORY | Al Yasmin logo">
+          </div>
+          <p class="lproj__tagline">Independent entrances, private parking</p>
+          <div class="lproj__bottom">
+            <p>Smart home systems and central air conditioning are complemented by independent entrances and private
+              parking.</p>
+            <a class="lproj__link" href="projects.html#project-2">View project <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="lmodal lmodal--project" id="zahia" role="dialog" aria-modal="true" aria-label="ZAHIA | Al Mughrazat"
+    aria-hidden="true">
+    <div class="lmodal__panel">
+      <button class="lmodal__close" type="button">Close</button>
+      <div class="lproj">
+        <div class="lproj__image lmodal__side-image"><span class="lproj__ph"><img src="assets/img/logo-zahya.png"
+              alt=""></span></div>
+        <div class="lproj__content">
+          <p class="lproj__title" role="heading" aria-level="2">ZAHIA | Al Mughrazat</p>
+          <div class="lproj__top">
+            <span class="lproj__tag">Residences</span>
+            <img class="lproj__logo" src="assets/img/logo-zahya.png" alt="ZAHIA | Al Mughrazat logo">
+          </div>
+          <p class="lproj__tagline">Formed to adjust</p>
+          <div class="lproj__bottom">
+            <p>The residences feature smart home systems, concealed central air conditioning, and staff rooms with
+              en-suite bathrooms.</p>
+            <a class="lproj__link" href="projects.html#project-3">View project <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="lmodal lmodal--project" id="olyx" role="dialog" aria-modal="true" aria-label="OLYX | Al Olaya"
+    aria-hidden="true">
+    <div class="lmodal__panel">
+      <button class="lmodal__close" type="button">Close</button>
+      <div class="lproj">
+        <div class="lproj__image lmodal__side-image"><span class="lproj__ph"><img src="assets/img/logo-olyx.png"
+              alt=""></span></div>
+        <div class="lproj__content">
+          <p class="lproj__title" role="heading" aria-level="2">OLYX | Al Olaya</p>
+          <div class="lproj__top">
+            <span class="lproj__tag">Luxurious life</span>
+            <img class="lproj__logo" src="assets/img/logo-olyx.png" alt="OLYX | Al Olaya logo">
+          </div>
+          <p class="lproj__tagline">In the heart of Al Olaya</p>
+          <div class="lproj__bottom">
+            <p>The residences offer smart home systems, private parking, and staff rooms with en-suite. Private pools
+              are available in selected units, while balconies and green spaces vary by unit type.</p>
+            <a class="lproj__link" href="projects.html#project-4">View project <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="lmodal lmodal--project" id="al-murooj" role="dialog" aria-modal="true" aria-label="Balance Al Murooj"
+    aria-hidden="true">
+    <div class="lmodal__panel">
+      <button class="lmodal__close" type="button">Close</button>
+      <div class="lproj">
+        <div class="lproj__image lmodal__side-image"><span class="lproj__ph"><img src="assets/img/logo-nrouj.png"
+              alt=""></span></div>
+        <div class="lproj__content">
+          <p class="lproj__title" role="heading" aria-level="2">Balance Al Murooj</p>
+          <div class="lproj__top">
+            <span class="lproj__tag">Residences</span>
+            <img class="lproj__logo" src="assets/img/logo-nrouj.png" alt="Balance Al Murooj logo">
+          </div>
+          <p class="lproj__tagline">Comfort in every detail</p>
+          <div class="lproj__bottom">
+            <p>The residences feature smart home systems, central air conditioning, and a central vacuum system. The
+              development also includes parking spaces, air-conditioned corridors, and security cameras.</p>
+            <a class="lproj__link" href="projects.html#project-5">View project <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="lmodal lmodal--project" id="al-rabwah-1" role="dialog" aria-modal="true" aria-label="Balance Al Rabwah 1"
+    aria-hidden="true">
+    <div class="lmodal__panel">
+      <button class="lmodal__close" type="button">Close</button>
+      <div class="lproj">
+        <div class="lproj__image lmodal__side-image"><span class="lproj__ph"><img src="assets/img/logo-coltine.png"
+              alt=""></span></div>
+        <div class="lproj__content">
+          <p class="lproj__title" role="heading" aria-level="2">Balance Al Rabwah 1</p>
+          <div class="lproj__top">
+            <span class="lproj__tag">Colline</span>
+            <img class="lproj__logo" src="assets/img/logo-coltine.png" alt="Balance Al Rabwah 1 logo">
+          </div>
+          <p class="lproj__tagline">Space for family life</p>
+          <div class="lproj__bottom">
+            <p>The project plans include outdoor spaces, dressing areas, and family living rooms. Selected unit layouts
+              also incorporate staff rooms, laundry rooms, and storage spaces.</p>
+            <a class="lproj__link" href="projects.html#project-6">View project <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="lmodal lmodal--project" id="al-rabwah-2" role="dialog" aria-modal="true" aria-label="Balance Al Rabwah 2"
+    aria-hidden="true">
+    <div class="lmodal__panel">
+      <button class="lmodal__close" type="button">Close</button>
+      <div class="lproj">
+        <div class="lproj__image lmodal__side-image"><span class="lproj__ph"><img src="assets/img/logo-coltine.png"
+              alt=""></span></div>
+        <div class="lproj__content">
+          <p class="lproj__title" role="heading" aria-level="2">Balance Al Rabwah 2</p>
+          <div class="lproj__top">
+            <span class="lproj__tag">Colline</span>
+            <img class="lproj__logo" src="assets/img/logo-coltine.png" alt="Balance Al Rabwah 2 logo">
+          </div>
+          <p class="lproj__tagline">Light from above</p>
+          <div class="lproj__bottom">
+            <p>The project plans include outdoor spaces and skylights in selected units. Dressing areas, staff rooms,
+              and dedicated laundry spaces are incorporated according to the unit layout.</p>
+            <a class="lproj__link" href="projects.html#project-7">View project <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="lmodal lmodal--project" id="maad-mekkah" role="dialog" aria-modal="true" aria-label="MAAD MEKKAH"
+    aria-hidden="true">
+    <div class="lmodal__panel">
+      <button class="lmodal__close" type="button">Close</button>
+      <div class="lproj">
+        <div class="lproj__image lmodal__side-image"><span class="lproj__ph"><img src="assets/img/logo-arabic.png"
+              alt=""></span></div>
+        <div class="lproj__content">
+          <p class="lproj__title" role="heading" aria-level="2">MAAD MEKKAH</p>
+          <div class="lproj__top">
+            <span class="lproj__tag">Makkah</span>
+            <img class="lproj__logo" src="assets/img/logo-arabic.png" alt="MAAD MEKKAH logo">
+          </div>
+          <p class="lproj__tagline">Beyond Riyadh</p>
+          <div class="lproj__bottom">
+            <p>Remove all artificial AI-generated patterns, worm-like details, repeated grooves, excessive
+              micro-texture, embossed appearance, sharpening artifacts, and</p>
+            <a class="lproj__link" href="projects.html#project-8">View project <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollSmoother.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/SplitText.min.js"></script>
+  <script src="js/main.js"></script>
+</body>
+
+</html>
