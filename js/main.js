@@ -633,7 +633,7 @@
     scale: 0.8, autoAlpha: 0, duration: 1.6, ease: "expo.out", stagger: 0.08,
     scrollTrigger: { trigger: ".pillars", start: "top 75%" },
   });
-  gsap.from([".chips .chip", ".pillars__kicker", ".pillars__list", ".ticker"], {
+  gsap.from([".pillars__label", ".pillars__kicker", ".pillars__list", ".ticker"], {
     autoAlpha: 0, y: 20, duration: 1.1, ease: "expo.out", stagger: 0.06,
     scrollTrigger: { trigger: ".pillars", start: "top 60%" },
   });
