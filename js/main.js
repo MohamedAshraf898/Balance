@@ -1089,6 +1089,21 @@
       { p: 0.90, fx: 30, fy: 36, rx: 46, rz: -6, s: 1.05, per: 1500, bank: 0, po: 38, cy: 52 },
       { p: 1.00, fx: 66, fy: 50, rx: 36, rz: 0, s: 1.25, per: 1500, bank: 0, po: 38, cy: 52 },
     ];
+    // phones: the map is ~3× the screen width (vs 1.65× on desktop), so the same shots only see a
+    // narrow slice — recentre on the project cluster, pull back so it all fits, and aim the Makkah
+    // shot at MAAD itself
+    const K_DESKTOP = K.map((k) => ({ ...k }));
+    const phoneMQ = matchMedia("(max-width: 900px)");
+    const applyFraming = () => {
+      const M = [ // same order as K
+        { fx: 74, s: 0.62 }, { fx: 74, s: 0.68 }, { fx: 74, s: 0.92 }, { fx: 74, s: 1.15 },
+        { fx: 74.5, fy: 50, s: 0.94 }, { fx: 74.5, fy: 47, s: 0.92 }, { fx: 74.5, fy: 47, s: 0.92 }, // all projects in view
+        { fx: 8, fy: 28, s: 0.95 },  // MAAD MEKKAH
+        { fx: 74, fy: 46, s: 0.78 }, // overview
+      ];
+      K.forEach((k, i) => Object.assign(k, K_DESKTOP[i], phoneMQ.matches ? M[i] : {}));
+    };
+    applyFraming(); // re-applied on resize/rotate, so DevTools device mode and tablets switch framing live
     const CH = ["fx", "fy", "rx", "rz", "s", "per", "bank", "po", "cy"];
     const catmull = (p0, p1, p2, p3, t) => {
       const t2 = t * t, t3 = t2 * t;
@@ -1198,9 +1213,43 @@
         }
       }
     };
-    gsap.ticker.add(placePins);
-    addEventListener("resize", () => { measure(); applyCam(); });
+    /* label collisions: project names always stay readable — a landmark/city label that would cover
+       one fades out, and a project name that hits another project name steps upward until clear.
+       Label boxes are measured once (relative to their pin) and reused, so frames do no layout reads. */
+    const labelOf = (d) => d.lab || (d.lab = $(".lpin__label", d.pin));
+    const PRIO = (d) => (d.pin.classList.contains("lpin--primary") ? 0 : d.pin.classList.contains("lpin--label") ? 2 : 1);
+    const ordered = [...pinData].sort((a, c) => PRIO(a) - PRIO(c));
+    const boxOf = (d) => { // label rect relative to the pin's screen point, cached
+      if (d.box) return d.box;
+      const lr = labelOf(d).getBoundingClientRect(), pr = d.pin.getBoundingClientRect();
+      if (!lr.width) return null;
+      const cx = pr.left + pr.width / 2, cy = pr.top + pr.height / 2, ly = parseFloat(labelOf(d).style.getPropertyValue("--ly")) || 0;
+      return (d.box = { l: lr.left - cx, t: lr.top - cy - ly, w: lr.width, h: lr.height });
+    };
+    const declutter = () => {
+      const placed = [];
+      for (const d of ordered) {
+        const lab = labelOf(d);
+        if (d.off || d.pin.classList.contains("lpin--hidden")) { lab.classList.remove("is-yield"); continue; }
+        const bx = boxOf(d);
+        if (!bx) continue;
+        const hit = (dy) => placed.some((r) => d.tx + bx.l < r.r && d.tx + bx.l + bx.w > r.l && d.ty + bx.t + dy < r.b && d.ty + bx.t + dy + bx.h > r.t);
+        let dy = 0;
+        if (PRIO(d) === 0) { const step = bx.h + 2; for (let k = 0; k < 4 && hit(dy); k++) dy -= step; }
+        const yield_ = PRIO(d) !== 0 && hit(0);
+        lab.classList.toggle("is-yield", yield_);
+        if ((parseFloat(lab.style.getPropertyValue("--ly")) || 0) !== dy) lab.style.setProperty("--ly", dy + "px");
+        if (!yield_) placed.push({ l: d.tx + bx.l - 3, r: d.tx + bx.l + bx.w + 3, t: d.ty + bx.t + dy - 2, b: d.ty + bx.t + dy + bx.h + 2 });
+      }
+    };
+    const placeAndDeclutter = () => { const moved = camDirty; placePins(); if (moved) declutter(); };
+    gsap.ticker.add(placeAndDeclutter);
+    // re-frame on resize/rotate — and again after ScrollTrigger's refresh, once the pinned stage has its new size
+    const reframe = () => { applyFraming(); measure(); pinData.forEach((d) => (d.box = null)); cam = sample(path.p); applyCam(); };
+    addEventListener("resize", reframe);
+    ScrollTrigger.addEventListener("refresh", reframe);
     function revealPins(p) { // hoisted: ScrollTrigger may call onUpdate while it is being created
+      camDirty = true; // visibility may change → re-check label collisions
       pins.forEach((pin) => {
         const hidden = p < +pin.dataset.reveal;
         pin.classList.toggle("lpin--hidden", hidden);

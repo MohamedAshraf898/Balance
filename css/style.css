@@ -810,6 +810,9 @@ button { cursor: pointer; }
   transition: transform 1s cubic-bezier(.7,0,.3,1);
 }
 .lpin--hidden { opacity: 0; pointer-events: none; }
+/* label de-collision (JS): --ly lifts a project name clear of another; is-yield fades a landmark name */
+.lpin__label { translate: 0 var(--ly, 0px); transition: transform 1s cubic-bezier(.7,0,.3,1), translate .45s var(--ease), opacity .35s; }
+.lpin__label.is-yield { opacity: 0; }
 .lpin--hidden .lpin__content { transform: translateY(30px); }
 
 .lpin--secondary .lpin__bg, .lpin--primary .lpin__bg { opacity: 0; } /* buildings replace the dots */
