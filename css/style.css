@@ -355,7 +355,9 @@ button {
    ========================================================================== */
 .hero {
   position: relative;
-  height: max(100svh, calc(811 * var(--u)), 600px);
+  /* exactly one screen tall, whatever the screen's shape — sizing by width (811/1440)
+     pushed the bottom row below the fold on wide, short laptop screens */
+  height: max(100svh, 600px);
   overflow: hidden;
   isolation: isolate;
 }
@@ -410,7 +412,8 @@ button {
 .hero__content {
   position: absolute;
   left: var(--gutter);
-  top: 39.4%;
+  /* 39.4% of the screen, but never so low it runs into the bottom row on short screens */
+  top: min(39.4%, calc(100% - 368 * var(--u)));
   width: calc(470 * var(--u));
   min-width: 300px;
 }
