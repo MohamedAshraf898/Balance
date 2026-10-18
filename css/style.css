@@ -900,19 +900,20 @@ button { cursor: pointer; }
    PROJECT PAGE (IVORY | Al Yasmin) — Figma "Desktop - 3" (2008:122)
    hero: night → day cross-fade on scroll, then reframe (azimuteresidencial.com.br)
    ========================================================================== */
-.phx { --ink: #ffffff; position: relative; height: 100vh; min-height: 560px; overflow: hidden; background: #000; isolation: isolate; }
+.phx { --ink: #141414; position: relative; height: 100vh; min-height: 560px; overflow: hidden; background: #000; isolation: isolate; }
 .phx__frame { position: absolute; inset: 0; z-index: -1; will-change: opacity; }
 .phx__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; will-change: transform, opacity; }
-.phx__img--day { opacity: 0; }
+.phx__img--day { opacity: 1; } /* opens on the day render; scroll fades it to night */
 .phx__shade {
   position: absolute; inset: 0;
   background:
     linear-gradient(180deg, rgba(0,0,0,.35) 0%, rgba(0,0,0,0) 22%, rgba(0,0,0,0) 48%, rgba(0,0,0,.62) 100%),
     linear-gradient(90deg, rgba(0,0,0,.45) 0%, rgba(0,0,0,0) 45%);
+  opacity: 0;
 }
 /* light mode: a soft daylight wash so dark text reads over the day render */
 .phx__shade--light {
-  opacity: 0;
+  opacity: 1;
   background:
     linear-gradient(180deg, rgba(246,243,238,.32) 0%, rgba(246,243,238,0) 16%, rgba(246,243,238,0) 52%, rgba(246,243,238,.74) 100%),
     linear-gradient(90deg, rgba(246,243,238,.46) 0%, rgba(246,243,238,0) 34%),
@@ -934,8 +935,8 @@ button { cursor: pointer; }
 .phx__stat:nth-child(2) { text-align: center; }
 .phx__stat:nth-child(3) { text-align: right; }
 .phx__cue { position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 10px; color: var(--ink); opacity: .7; font-size: 10px; letter-spacing: .2em; }
-.phx__cue i { position: relative; width: 1px; height: 34px; background: rgba(255,255,255,.2); overflow: hidden; }
-.phx__cue i::after { content: ""; position: absolute; left: 0; right: 0; top: -100%; height: 100%; background: #fff; animation: cueDrop 1.8s var(--ease) infinite; }
+.phx__cue i { position: relative; width: 1px; height: 34px; background: color-mix(in srgb, var(--ink) 20%, transparent); overflow: hidden; }
+.phx__cue i::after { content: ""; position: absolute; left: 0; right: 0; top: -100%; height: 100%; background: var(--ink); animation: cueDrop 1.8s var(--ease) infinite; }
 @keyframes cueDrop { to { top: 100%; } }
 /* About + Warranties over the warm glow */
 .pwarm { position: relative; isolation: isolate; overflow: hidden; }

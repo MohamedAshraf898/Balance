@@ -39,7 +39,7 @@
       <a href="#home" class="nav__link" data-link><span data-text="Home">Home</span></a>
       <!-- <a href="#about" class="nav__link" data-link><span data-text="About us">About us</span></a> -->
       <a href="projects.html" class="nav__link" data-link><span data-text="Our Projects">Our Projects</span></a>
-      <a href="#locations" class="nav__link" data-link><span data-text="Our Locations">Our Locations</span></a>
+      <a href="location.html" class="nav__link" data-link><span data-text="Our Locations">Our Locations</span></a>
     </nav>
     <button class="burger" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
   </header>
@@ -67,7 +67,8 @@
           <canvas class="hero__fire" aria-hidden="true"></canvas>
           <div class="hero__content">
             <h1 class="hero__title">Living, Thoughtfully Defined</h1>
-            <p class="hero__text">A Saudi real estate developer creating refined residences across Riyadh, distinguished by
+            <p class="hero__text">A Saudi real estate developer creating refined residences across Riyadh, distinguished
+              by
               considered architecture, meticulous details, and enduring value.</p>
           </div>
           <div class="hero__bottom">
@@ -162,7 +163,8 @@
 
           <section class="about" id="about">
             <h2 class="about__title">ABOUT US</h2>
-            <p class="about__text">Balance is a Saudi real estate developer shaping refined residences across Riyadh through
+            <p class="about__text">Balance is a Saudi real estate developer shaping refined residences across Riyadh
+              through
               considered architecture, purposeful planning, and meticulous attention to detail, creating spaces of
               enduring value.</p>
           </section>
@@ -170,12 +172,7 @@
           <section class="projects" id="projects">
             <div class="projects__pin">
               <h2 class="label">OUR PROJECTS</h2>
-              <div class="carousel" data-cursor="Drag">
-                <div class="carousel__card" data-title="Project 01"></div>
-                <div class="carousel__card" data-title="Project 02"></div>
-                <div class="carousel__card" data-title="Project 03"></div>
-                <div class="carousel__card" data-title="Project 04"></div>
-                <div class="carousel__card" data-title="Project 05"></div>
+              <div class="carousel" data-cursor="Drag"><!-- cards are built from js/projects-data.js -->
               </div>
               <div class="projects__progress mono" aria-hidden="true">
                 <span class="projects__count">01</span>
@@ -277,6 +274,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollSmoother.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/SplitText.min.js"></script>
+  <script src="js/projects-data.js"></script>
+  <script src="js/projects.js"></script>
   <script src="js/main.js"></script>
 </body>
 

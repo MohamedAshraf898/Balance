@@ -19,7 +19,8 @@
   /* ---------------------------------------------------------------------
      Smooth scroll
      --------------------------------------------------------------------- */
-  const smoother = reduceMotion
+  // touch: native scroll, so pinned sections use position:fixed and never lag a frame behind
+  const smoother = reduceMotion || !finePointer
     ? null
     : ScrollSmoother.create({
         wrapper: "#smooth-wrapper",
@@ -742,6 +743,7 @@
   const endDrag = (e) => {
     if (!dragging) return;
     dragging = false; carousel.classList.remove("is-dragging");
+    if (e.type === "pointercancel") return; // the browser took the touch over for a page scroll — not a tap or swipe
     const dx = e.clientX - startX;
     let target = Math.round(state.pos);
     if (target === Math.round(startPos) && Math.abs(dx) > 40) target += dx < 0 ? 1 : -1;
@@ -765,7 +767,7 @@
   });
 
   gsap.from(cards, {
-    y: 120, autoAlpha: 0, duration: 1.4, ease: "expo.out", stagger: { each: 0.08, from: "center" },
+    y: () => cards[0].offsetHeight * 0.3, autoAlpha: 0, // 120px on desktop, scaled to the card on mobile duration: 1.4, ease: "expo.out", stagger: { each: 0.08, from: "center" },
     scrollTrigger: { trigger: carousel, start: "top 85%" },
     onStart: render,
   });
@@ -1276,38 +1278,40 @@
     const hero = $(".phx");
     const night = $(".phx__img--night"), day = $(".phx__img--day");
     gsap.set([".phx__lead", ".phx__note", ".phx__stat"], { autoAlpha: 0 });
-    gsap.set(night, { scale: 1.15 });
+    gsap.set(day, { scale: 1.15 });
 
     pageIntro = () => {
       const lead = SplitText.create(".phx__lead", { type: "lines", mask: "lines" }).lines;
       gsap.set([".phx__lead", ".phx__note"], { autoAlpha: 1 });
       return gsap.timeline({ defaults: { ease: "expo.out" } })
-        .to(night, { scale: 1.04, duration: 2.6, ease: "power3.out" }, 0)
+        .to(day, { scale: 1.04, duration: 2.6, ease: "power3.out" }, 0)
         .from(lead, { yPercent: 110, duration: 1.2, stagger: 0.06 }, 0.5)
         .from(".phx__note", { y: 20, autoAlpha: 0, duration: 1.1 }, 0.7)
         .fromTo(".phx__stat", { y: 30, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 1.1, stagger: 0.1 }, 0.8);
     };
 
-    /* hero (azimute): pinned; the cue fades, then the whole hero switches from dark to light mode —
-       night → day render, dark shade → daylight wash, white → ink text — with the same content */
+    /* hero (azimute): pinned; opens in light mode on the day render, then the cue fades and the
+       whole hero turns dark — day → night render, daylight wash → dark shade, ink → white text —
+       handing over to the black page below */
     const setTheme = (light) => document.body.classList.toggle("theme-light", light);
+    setTheme(true);
     gsap.timeline({
       defaults: { ease: "none" },
       scrollTrigger: {
         trigger: hero, start: "top top", end: () => "+=" + innerHeight * 0.9, pin: true, scrub: 1,
-        onUpdate: (st) => setTheme(st.progress > 0.32),
+        onUpdate: (st) => setTheme(st.progress < 0.32),
         onLeave: () => setTheme(false),
-        onEnterBack: (st) => setTheme(st.progress > 0.32),
-        onLeaveBack: () => setTheme(false),
+        onEnterBack: (st) => setTheme(st.progress < 0.32),
+        onLeaveBack: () => setTheme(true),
       },
     })
       .to(".phx__cue", { autoAlpha: 0, duration: 0.09 }, 0)
-      .to(day, { opacity: 1, duration: 0.5, ease: "power1.inOut" }, 0.09)
-      .to(".phx__shade:not(.phx__shade--light)", { opacity: 0, duration: 0.5, ease: "power1.inOut" }, 0.09)
-      .to(".phx__shade--light", { opacity: 1, duration: 0.5, ease: "power1.inOut" }, 0.09)
-      .to(hero, { "--ink": "#141414", duration: 0.4, ease: "power1.inOut" }, 0.16)
+      .to(day, { opacity: 0, duration: 0.5, ease: "power1.inOut" }, 0.09)
+      .to(".phx__shade:not(.phx__shade--light)", { opacity: 1, duration: 0.5, ease: "power1.inOut" }, 0.09)
+      .to(".phx__shade--light", { opacity: 0, duration: 0.5, ease: "power1.inOut" }, 0.09)
+      .to(hero, { "--ink": "#ffffff", duration: 0.4, ease: "power1.inOut" }, 0.16)
       .to([night, day], { scale: 1, duration: 0.7 }, 0.09)
-      .to({}, { duration: 0.3 }, 0.7); // hold the light frame before the page moves on
+      .to({}, { duration: 0.3 }, 0.7); // hold the dark frame before the page moves on
 
     // About + warranties reveals (split after fonts so the lines are final)
     (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => {
@@ -1396,9 +1400,10 @@
   // wordmark hover spotlight — the cursor lights the letters with fire
   (() => {
     const mark = $(".footer__mark");
+    if (!mark) return; // pages without a footer (location)
     const inner = $(".footer__mark-inner", mark);
     const reveal = $(".footer__mark-reveal", mark);
-    if (!mark || !reveal) return;
+    if (!reveal) return;
     const spot = { x: -9999, y: -9999, r: 0 };
     const xTo = gsap.quickTo(spot, "x", { duration: 0.45, ease: "power3.out" });
     const yTo = gsap.quickTo(spot, "y", { duration: 0.45, ease: "power3.out" });
@@ -1428,8 +1433,9 @@
     mark.addEventListener("pointerup", (e) => e.pointerType !== "mouse" && setTimeout(hide, 600));
   })();
 
-  // form
+  // form (not on pages without a footer)
   const form = $(".form");
+  if (form) {
   const note = $(".form__note");
   const noteDefault = note.textContent;
   let submitter = null;
@@ -1451,6 +1457,7 @@
     setTimeout(() => { note.textContent = noteDefault; note.classList.remove("is-ok"); }, 5000);
   });
   $$(".field input", form).forEach((i) => i.addEventListener("input", () => i.closest(".field").classList.remove("is-invalid")));
+  }
 
   // outline buttons: fill grows from pointer position
   $$(".btn-outline").forEach((b) =>
