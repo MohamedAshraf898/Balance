@@ -440,7 +440,7 @@ button {
   position: absolute;
   left: var(--gutter);
   right: var(--gutter);
-  bottom: calc(106 * var(--u));
+  bottom: calc(126 * var(--u));
   display: flex;
   align-items: center;
   justify-content: space-between;
