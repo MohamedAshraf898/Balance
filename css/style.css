@@ -440,7 +440,7 @@ button {
   position: absolute;
   left: var(--gutter);
   right: var(--gutter);
-  bottom: calc(126 * var(--u));
+  bottom: calc(116 * var(--u));
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -600,7 +600,7 @@ button {
 }
 
 .mono {
-  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   font-size: max(11px, calc(12 * var(--u)));
   font-weight: 400;
   letter-spacing: .04em;
@@ -876,7 +876,7 @@ button {
 }
 
 .label {
-  font-size: max(15px, calc(20 * var(--u)));
+  font-size: max(24px, calc(32 * var(--u)));
   font-weight: 400;
   line-height: 1.2;
   padding-left: var(--gutter);
@@ -943,6 +943,61 @@ button {
   background: var(--card);
   border-radius: calc(31 * var(--u));
   will-change: transform;
+  overflow: hidden;
+}
+
+/* bottom-left caption: logo · project name / area, over a soft dark fade */
+.carousel__card::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 55%;
+  background: linear-gradient(0deg, rgba(0, 0, 0, .72) 0%, rgba(0, 0, 0, .35) 45%, rgba(0, 0, 0, 0) 100%);
+  pointer-events: none;
+}
+
+.carousel__info {
+  position: absolute;
+  left: calc(var(--cw) * 28 / 641);
+  bottom: calc(var(--cw) * 24 / 641);
+  right: calc(var(--cw) * 28 / 641);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: calc(var(--cw) * 16 / 641);
+  color: #fff;
+  pointer-events: none;
+}
+
+.carousel__logo {
+  height: max(20px, calc(var(--cw) * 46 / 641));
+  width: auto;
+  max-width: max(48px, calc(var(--cw) * 110 / 641));
+  object-fit: contain;
+  object-position: left center;
+  padding-right: calc(var(--cw) * 16 / 641);
+  border-right: 1px solid rgba(255, 255, 255, .45);
+  box-sizing: content-box;
+  filter: drop-shadow(0 1px 8px rgba(0, 0, 0, .35));
+}
+
+.carousel__name {
+  font-size: max(11px, calc(var(--cw) * 22 / 641));
+  font-weight: 600;
+  letter-spacing: .04em;
+  line-height: 1.15;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, .4);
+}
+
+.carousel__area {
+  margin-top: calc(var(--cw) * 4 / 641);
+  font-size: max(9px, calc(var(--cw) * 15 / 641));
+  font-weight: 300;
+  line-height: 1.2;
+  color: rgba(255, 255, 255, .85);
+  text-shadow: 0 1px 10px rgba(0, 0, 0, .4);
 }
 
 .label--locations {
@@ -964,26 +1019,41 @@ button {
   width: calc(100% + 15 * var(--u));
   aspect-ratio: 1455 / 689;
   overflow: hidden;
+  background: #161616;
+  /* the map's own base colour, so panning past its edge blends in */
+}
+
+/* .map__zoom takes the scroll-in zoom, .map__world the fly-to-area pan/zoom of the map image;
+   pins live in .map__zoom and track .map__world's pan/zoom, so they stay on the streets at a fixed size */
+.map__zoom,
+.map__world {
+  position: absolute;
+  inset: 0;
+  transform-origin: 70% 55%;
+}
+
+.map__world {
+  transform-origin: 0 0;
 }
 
 .map__img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transform-origin: 70% 55%;
 }
 
 .pin {
   position: absolute;
-  left: var(--x);
-  top: var(--y);
+  /* follows .map__world's pan/zoom (JS sets --ws/--wx/--wy) without scaling itself */
+  left: calc(var(--x) * var(--ws, 1) + var(--wx, 0px));
+  top: calc(var(--y) * var(--ws, 1) + var(--wy, 0px));
   width: max(18px, calc(23.5 * var(--u)));
   aspect-ratio: 1;
   transform: translate(-50%, -50%);
   z-index: 2;
 }
 
-.pin img {
+.pin>img {
   width: 100%;
   height: 100%;
   position: relative;
@@ -1013,20 +1083,70 @@ button {
   }
 }
 
+/* hover / chosen area: the project's logo opens in a dark disc over the pin and its name
+   floats above — same treatment as the project pins on location.html */
+.pin {
+  --pv: max(64px, calc(76 * var(--u)));
+}
+
+.pin__preview {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--pv);
+  height: var(--pv);
+  z-index: 2;
+  opacity: 0;
+  border-radius: 50%;
+  background: #0b0b0b;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(.4);
+  transition: transform 1s cubic-bezier(.7, 0, .3, 1), opacity 1s cubic-bezier(.7, 0, .3, 1);
+}
+
+.pin__preview img {
+  width: 62%;
+  height: 62%;
+  object-fit: contain;
+}
+
+.pin__preview::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--pv) * 1.2);
+  height: calc(var(--pv) * 1.2);
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, .2);
+  transform: translate(-50%, -50%) scale(.5);
+  transition: transform 1s cubic-bezier(.7, 0, .3, 1);
+}
+
 .pin__tip {
   position: absolute;
   left: 50%;
   bottom: calc(100% + 10px);
+  z-index: 3;
   white-space: nowrap;
   font-size: 11px;
   letter-spacing: .1em;
-  background: var(--black);
-  border: 1px solid rgba(255, 255, 255, .25);
-  padding: 6px 10px;
+  text-transform: uppercase;
+  line-height: 1;
+  color: #ffd9c2;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, .65);
   transform: translate(-50%, 6px);
   opacity: 0;
   pointer-events: none;
-  transition: opacity .35s, transform .45s var(--ease);
+  transition: opacity .35s, transform 1s cubic-bezier(.7, 0, .3, 1);
+}
+
+.pin:hover,
+.pin:focus-visible,
+.pin.is-lit {
+  z-index: 4;
 }
 
 .pin:hover .pin__tip,
@@ -1036,7 +1156,31 @@ button {
   transform: translate(-50%, 0);
 }
 
-.map.has-focus .pin:not(.is-lit) img {
+.pin--logo:hover .pin__preview,
+.pin--logo:focus-visible .pin__preview,
+.pin--logo.is-lit .pin__preview {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.pin--logo:hover .pin__preview::after,
+.pin--logo:focus-visible .pin__preview::after,
+.pin--logo.is-lit .pin__preview::after {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* logo pins: the name is anchored at the pin's centre and lifts clear of the disc + ring */
+.pin--logo .pin__tip {
+  bottom: 50%;
+}
+
+.pin--logo:hover .pin__tip,
+.pin--logo:focus-visible .pin__tip,
+.pin--logo.is-lit .pin__tip {
+  transform: translate(-50%, calc(var(--pv) * -.6 - 6px));
+}
+
+.map.has-focus .pin:not(.is-lit)>img {
   opacity: .25;
   filter: grayscale(1);
 }
@@ -1051,38 +1195,62 @@ button {
   left: calc(57 * var(--u));
   bottom: 0;
   width: calc(393 * var(--u));
-  height: calc(453 * var(--u));
+  min-height: calc(453 * var(--u));
   min-width: 260px;
   background: var(--black);
   border: 1px solid rgba(255, 255, 255, .3);
   display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding-bottom: calc(54 * var(--u));
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: calc(40 * var(--u)) calc(28 * var(--u)) calc(54 * var(--u));
   z-index: 3;
+}
+
+.map__title {
+  font-size: max(14px, calc(20 * var(--u)));
+  line-height: 1.3;
+  font-weight: 300;
+  text-align: center;
+  color: var(--soft);
+  padding-bottom: calc(22 * var(--u));
+  margin-bottom: calc(22 * var(--u));
+  border-bottom: 1px solid rgba(255, 255, 255, .2);
+  align-self: stretch;
 }
 
 .map__list {
   text-align: center;
 }
 
-.map__list li {
-  font-size: max(20px, calc(32 * var(--u)));
-  line-height: 1.21;
-  cursor: default;
+.map__list button {
+  font-size: max(16px, calc(24 * var(--u)));
+  line-height: 1.45;
+  cursor: pointer;
   transition: color .4s;
 }
 
-.map__list li:hover,
-.map__list li.is-lit {
+.map__list button:disabled {
+  cursor: default;
+  opacity: .5;
+}
+
+.map__list li:hover button:not(:disabled),
+.map__list li.is-lit button {
   color: var(--orange);
+}
+
+.map__list li.is-active button {
+  color: var(--orange);
+  text-decoration: underline;
+  text-underline-offset: .25em;
+  text-decoration-thickness: 1px;
 }
 
 /* ==========================================================================
    Footer — card 578×643 · nav/contact 27.7/700 + 20.8/400
    ========================================================================== */
 .footer {
-  padding-top: calc(73 * var(--u));
   overflow: hidden;
 }
 
@@ -1098,7 +1266,7 @@ button {
 }
 
 .footer__block+.footer__block {
-  margin-top: calc(79 * var(--u));
+  margin-top: calc(9 * var(--u));
 }
 
 .footer__title {
@@ -1157,6 +1325,45 @@ button {
 .footer__links a:hover::after {
   transform: scaleX(1);
   transform-origin: left;
+}
+
+/* contact: email / phone links wrap on narrow columns instead of overflowing */
+.footer__links--contact a {
+  word-break: break-word;
+}
+
+/* social icons row */
+.footer__social {
+  display: flex;
+  align-items: center;
+  gap: max(14px, calc(18 * var(--u)));
+  padding-top: calc(4 * var(--u));
+}
+
+.footer__links .footer__social a {
+  display: grid;
+  place-items: center;
+  width: max(36px, calc(42 * var(--u)));
+  height: max(36px, calc(42 * var(--u)));
+  border: 1px solid rgba(245, 245, 245, .35);
+  border-radius: 50%;
+  transition: color .4s, border-color .4s, background-color .4s, transform .5s var(--ease);
+}
+
+.footer__links .footer__social a::after {
+  display: none;
+}
+
+.footer__social svg {
+  width: 50%;
+  height: 50%;
+}
+
+.footer__links .footer__social a:hover {
+  color: var(--black);
+  background: var(--orange);
+  border-color: var(--orange);
+  transform: translateY(-3px);
 }
 
 .form {
@@ -1291,7 +1498,7 @@ button {
 
 /* Giant wordmark — 1440×303 @ opacity .41, cut by the page edge */
 .footer__mark {
-  margin-top: calc(259 * var(--u));
+  /* margin-top: calc(259 * var(--u)); */
   height: calc(288 * 100vw / 1440);
   overflow: hidden;
 }
@@ -1558,18 +1765,25 @@ button {
   position: relative;
   width: calc(var(--w) * var(--u));
   height: calc(var(--h) * var(--u));
-  overflow: hidden;
   margin-bottom: calc((var(--slot, 110) - var(--h)) * var(--u));
   /* reserve a logo slot (110px default) */
+}
+
+/* the clip box crops the logo to its design size; the hover lift/glow is applied to the box
+   (not the image inside it) so the letters are never cut and the glow follows their shape */
+.proj__logo-clip {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  transition: transform .7s var(--ease), filter .7s var(--ease);
 }
 
 .proj__logo img {
   position: absolute;
   max-width: none;
-  transition: transform .7s var(--ease), filter .7s var(--ease);
 }
 
-.proj:hover .proj__logo img {
+.proj:hover .proj__logo-clip {
   transform: translateY(-4%) scale(1.04);
   filter: drop-shadow(0 0 14px rgba(255, 120, 40, .55));
 }
@@ -2639,6 +2853,10 @@ button {
   will-change: transform, opacity;
 }
 
+.phx--single .phx__img--night {
+  display: none; /* only a day photo for this project */
+}
+
 .phx__img--day {
   opacity: 1;
 }
@@ -2988,9 +3206,11 @@ button {
 }
 
 .pext__title {
-  font-size: calc(var(--cs) * 96 / 731);
+  /* sized so "Take a closer look." sits on one line across the card (96 fit the old 11-letter title) */
+  font-size: calc(var(--cs) * 62 / 731);
   font-weight: 400;
   line-height: 1.21;
+  white-space: nowrap;
 }
 
 .pext__thumb {
@@ -3022,6 +3242,32 @@ button {
   object-fit: cover;
   z-index: 1;
   will-change: clip-path;
+}
+
+/* two more exterior renders under the full-screen photo: one row, equal height,
+   each item as wide as its own shape (--r = width / height) */
+.pgal {
+  display: flex;
+  gap: calc(24 * var(--u));
+  padding: calc(120 * var(--u)) var(--gutter) calc(40 * var(--u));
+}
+
+.pgal[hidden] {
+  display: none;
+}
+
+.pgal__item {
+  flex: var(--r) 1 0;
+  aspect-ratio: var(--r);
+  overflow: hidden;
+  background: #111;
+}
+
+.pgal__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  will-change: transform;
 }
 
 /* Project location */
@@ -3092,16 +3338,166 @@ button {
   overflow: hidden;
 }
 
-.ploc__map img {
+/* the locations map, zoomed and centred on this project (--px/--py = its position, 0–1).
+   --ww = map width; --fx/--fy = where the project sits on screen (left of the panel) */
+.ploc__map {
+  background: #0e0e0e;
+}
+
+.ploc__world {
+  --ww: max(200vw, 2100px);
+  --fx: 40%;
+  --fy: 50%;
   position: absolute;
-  left: calc(-194 * var(--u));
-  top: 0;
-  width: calc(1634 * var(--u));
-  min-width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform-origin: 60% 20%;
+  width: var(--ww);
+  height: calc(var(--ww) * 863 / 1823);
+  left: calc(var(--fx) - var(--px) * var(--ww));
+  top: calc(var(--fy) - var(--py) * var(--ww) * 863 / 1823);
   will-change: transform;
+}
+
+.ploc__map-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ploc__world .pin {
+  z-index: 3;
+}
+
+/* landmarks / areas / other Balance projects around it */
+.ploc__dot {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.ploc__dot i {
+  position: absolute;
+  left: -3px;
+  top: -3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.ploc__dot b {
+  position: absolute;
+  left: 12px;
+  top: 0;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: rgba(255, 255, 255, .85);
+  text-shadow: 0 1px 12px rgba(0, 0, 0, .65);
+}
+
+.ploc__dot.is-hidden {
+  display: none; /* would cover a label already placed (see declutterMap in projects.js) */
+}
+
+.ploc__dot--area b {
+  color: rgba(255, 255, 255, .55);
+}
+
+.ploc__dot--project i {
+  background: var(--orange);
+  box-shadow: 0 0 0 4px rgba(255, 77, 0, .18);
+}
+
+.ploc__dot--project b {
+  color: #ffd9c2;
+}
+
+/* generated panel (projects without their own panel images) */
+.ploc__info {
+  position: absolute;
+  inset: 0;
+  padding: calc(44 * var(--u)) calc(36 * var(--u)) calc(90 * var(--u));
+  display: flex;
+  flex-direction: column;
+  gap: calc(16 * var(--u));
+  color: var(--soft);
+}
+
+.ploc__tag {
+  align-self: flex-start;
+  border: 1px solid rgba(255, 255, 255, .35);
+  border-radius: 30px;
+  padding: 6px 12px;
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.ploc__name {
+  margin-top: calc(10 * var(--u));
+  font-size: max(24px, calc(36 * var(--u)));
+  line-height: 1.1;
+  font-weight: 600;
+}
+
+.ploc__tagline {
+  font-size: max(12px, calc(13 * var(--u)));
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(245, 245, 245, .6);
+}
+
+.ploc__about {
+  font-size: max(14px, calc(16 * var(--u)));
+  line-height: 1.55;
+  color: rgba(245, 245, 245, .85);
+}
+
+.ploc__near {
+  margin-top: calc(6 * var(--u));
+}
+
+.ploc__near li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding: calc(14 * var(--u)) 0;
+  border-bottom: 1px solid rgba(255, 255, 255, .14);
+  font-size: max(15px, calc(18 * var(--u)));
+}
+
+.ploc__near small {
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(245, 245, 245, .5);
+}
+
+.ploc__cta {
+  position: absolute;
+  left: calc(36 * var(--u));
+  bottom: calc(36 * var(--u));
+  z-index: 2;
+  display: inline-flex;
+  gap: 10px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid currentColor;
+  font-size: 12px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--soft);
+  transition: color .4s, gap .5s var(--ease);
+}
+
+.ploc__cta:hover {
+  color: var(--orange);
+  gap: 16px;
 }
 
 .ploc__panel {
@@ -3388,10 +3784,6 @@ body.theme-light .header.is-scrolled {
   }
 
   /* map — 616×291 @(-212) · card 207×120 @(101, +248) · 12.1px list */
-  .locations {
-    margin-bottom: calc(171 * var(--m));
-  }
-
   .locations::before {
     /* soft black band across the map's top edge */
     content: "";
@@ -3412,20 +3804,35 @@ body.theme-light .header.is-scrolled {
 
   .pin {
     width: 14px;
+    --pv: 50px;
+  }
+
+  /* the card now holds a heading + 9 areas, so it flows under the map (overlapping its bottom
+     edge as in Figma) instead of being a fixed 120px box */
+  .locations {
+    margin-bottom: calc(94 * var(--m));
   }
 
   .map__card {
-    left: calc(101 * var(--m));
-    top: calc(248 * var(--m));
+    position: relative;
+    left: auto;
     bottom: auto;
+    margin: calc(-43 * var(--m)) 0 0 calc(101 * var(--m));
     width: calc(207 * var(--m));
-    height: calc(120 * var(--m));
+    min-height: 0;
     min-width: 0;
-    padding-bottom: calc(6 * var(--m));
+    padding: 14px 12px 16px;
   }
 
-  .map__list li {
+  .map__title {
+    font-size: 12px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+  }
+
+  .map__list button {
     font-size: max(12px, calc(12.143 * var(--m)));
+    line-height: 1.6;
   }
 
   /* footer — nav/contact left, form card right (as desktop, scaled) */
@@ -3433,7 +3840,7 @@ body.theme-light .header.is-scrolled {
     column-gap: 16px;
   }
 
-  [data-page="home"] .footer__cols {
+  .footer__cols {
     grid-template-columns: 1fr calc(169.74 * var(--m));
     padding-right: 0;
   }
@@ -3667,6 +4074,17 @@ body.theme-light .header.is-scrolled {
     padding-left: 20px;
   }
 
+  .pgal {
+    flex-direction: column;
+    gap: 14px;
+    padding: 56px 20px 20px;
+  }
+
+  .pgal__item {
+    flex: none; /* stacked: full width, height from the image's own shape */
+    width: 100%;
+  }
+
   .pext__card {
     left: 50%;
   }
@@ -3688,6 +4106,38 @@ body.theme-light .header.is-scrolled {
     bottom: 70px;
     height: 62vw;
     min-width: 0;
+  }
+
+  .ploc__world {
+    --ww: max(420vw, 1500px);
+    --fx: 50%;
+    --fy: 30%;
+  }
+
+  .ploc__panel--info {
+    height: auto;
+    min-height: 300px;
+  }
+
+  .ploc__panel--info .ploc__slide {
+    position: relative;
+    grid-area: 1 / 1;
+  }
+
+  .ploc__panel--info {
+    display: grid;
+  }
+
+  .ploc__info {
+    position: relative;
+    inset: auto;
+    padding: 22px 20px 64px;
+    gap: 10px;
+  }
+
+  .ploc__cta {
+    left: 20px;
+    bottom: 20px;
   }
 
   .ploc__dots {

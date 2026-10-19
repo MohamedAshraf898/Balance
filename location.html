@@ -62,17 +62,7 @@
                   <img class="loc__map-img" src="assets/img/map-loc.webp" decoding="async"
                     alt="Map of Riyadh with Balance projects" width="1823" height="863">
                   <div class="loc__anchors" aria-hidden="true">
-                    <!-- project anchors are added from js/projects-data.js -->
-                    <i class="loc__anchor" data-pin="riyadh" style="--x:70%;--y:46%"></i>
-                    <i class="loc__anchor" data-pin="diriyah" style="--x:55%;--y:44%"></i>
-                    <i class="loc__anchor" data-pin="wadi-hanifah" style="--x:57%;--y:63%"></i>
-                    <i class="loc__anchor" data-pin="to-makkah" style="--x:22%;--y:48%"></i>
-                    <i class="loc__anchor" data-pin="kafd" style="--x:75%;--y:31%"></i>
-                    <i class="loc__anchor" data-pin="kingdom-centre" style="--x:70%;--y:50%"></i>
-                    <i class="loc__anchor" data-pin="al-faisaliah" style="--x:74.5%;--y:59%"></i>
-                    <i class="loc__anchor" data-pin="boulevard" style="--x:62%;--y:34%"></i>
-                    <i class="loc__anchor" data-pin="masmak" style="--x:68%;--y:75%"></i>
-                    <i class="loc__anchor" data-pin="stadium" style="--x:88%;--y:58%"></i>
+                    <!-- landmark + project anchors are added from js/projects-data.js -->
                   </div>
                 </div>
               </div>
@@ -83,37 +73,7 @@
               <span class="cloud c5"></span><span class="cloud c6"></span><span class="cloud c7"></span>
             </div>
             <div class="loc__vignette" aria-hidden="true"></div>
-            <div class="loc__pins">
-              <div class="lpin lpin--label lpin--hidden" data-pin="riyadh" data-reveal="0.15"><span
-                  class="lpin__content"><span class="lpin__bg"></span><span class="lpin__label">Riyadh</span></span>
-              </div>
-              <div class="lpin lpin--label lpin--hidden" data-pin="diriyah" data-reveal="0.15"><span
-                  class="lpin__content"><span class="lpin__bg"></span><span class="lpin__label">Diriyah</span></span>
-              </div>
-              <div class="lpin lpin--label lpin--hidden" data-pin="wadi-hanifah" data-reveal="0.15"><span
-                  class="lpin__content"><span class="lpin__bg"></span><span class="lpin__label">Wadi
-                    Hanifah</span></span></div>
-              <div class="lpin lpin--label lpin--hidden" data-pin="to-makkah" data-reveal="0.15"><span
-                  class="lpin__content"><span class="lpin__bg"></span><span class="lpin__label">Makkah
-                    Road</span></span></div>
-              <a class="lpin lpin--secondary lpin--hidden" href="#kafd" data-pin="kafd" data-reveal="0.28"
-                aria-label="KAFD"><span class="lpin__content"><span class="lpin__bg"></span><span
-                    class="lpin__label">KAFD</span></span></a>
-              <a class="lpin lpin--secondary lpin--hidden" href="#kingdom-centre" data-pin="kingdom-centre"
-                data-reveal="0.28" aria-label="Kingdom Centre"><span class="lpin__content"><span
-                    class="lpin__bg"></span><span class="lpin__label">Kingdom Centre</span></span></a>
-              <a class="lpin lpin--secondary lpin--hidden" href="#al-faisaliah" data-pin="al-faisaliah"
-                data-reveal="0.28" aria-label="Al Faisaliah Tower"><span class="lpin__content"><span
-                    class="lpin__bg"></span><span class="lpin__label">Al Faisaliah Tower</span></span></a>
-              <a class="lpin lpin--secondary lpin--hidden" href="#boulevard" data-pin="boulevard" data-reveal="0.28"
-                aria-label="Boulevard City"><span class="lpin__content"><span class="lpin__bg"></span><span
-                    class="lpin__label">Boulevard City</span></span></a>
-              <a class="lpin lpin--secondary lpin--hidden" href="#masmak" data-pin="masmak" data-reveal="0.28"
-                aria-label="Al Masmak Fortress"><span class="lpin__content"><span class="lpin__bg"></span><span
-                    class="lpin__label">Al Masmak Fortress</span></span></a>
-              <a class="lpin lpin--secondary lpin--hidden" href="#stadium" data-pin="stadium" data-reveal="0.28"
-                aria-label="King Fahd Stadium"><span class="lpin__content"><span class="lpin__bg"></span><span
-                    class="lpin__label">King Fahd Stadium</span></span></a>
+            <div class="loc__pins"><!-- landmark + project pins are added from js/projects-data.js -->
             </div>
             <h1 class="loc__title">Location</h1>
             <a class="loc__arrow" href="#explore" aria-label="Scroll down">
@@ -137,95 +97,6 @@
   </div>
 
   <!-- pin side panels -->
-  <div class="lmodal lmodal--poi" id="kafd" role="dialog" aria-modal="true" aria-label="KAFD" aria-hidden="true">
-    <div class="lmodal__panel">
-      <button class="lmodal__close" type="button">Close</button>
-      <div class="lpoi">
-        <div></div>
-        <div class="lpoi__top">
-          <div class="lpoi__image"><span class="lpoi__ph"></span></div>
-          <p class="lpoi__title" role="heading" aria-level="2">KAFD</p>
-        </div>
-        <p class="lpoi__desc">King Abdullah Financial District — Riyadh’s glass-and-steel business quarter, with towers,
-          a monorail and landscaped wadi walks at its heart.</p>
-      </div>
-    </div>
-  </div>
-  <div class="lmodal lmodal--poi" id="kingdom-centre" role="dialog" aria-modal="true" aria-label="Kingdom Centre"
-    aria-hidden="true">
-    <div class="lmodal__panel">
-      <button class="lmodal__close" type="button">Close</button>
-      <div class="lpoi">
-        <div></div>
-        <div class="lpoi__top">
-          <div class="lpoi__image"><span class="lpoi__ph"></span></div>
-          <p class="lpoi__title" role="heading" aria-level="2">Kingdom Centre</p>
-        </div>
-        <p class="lpoi__desc">The city’s best-known silhouette: a 302-metre tower crowned by a sky bridge, with a luxury
-          mall and hotel at its base on King Fahd Road.</p>
-      </div>
-    </div>
-  </div>
-  <div class="lmodal lmodal--poi" id="al-faisaliah" role="dialog" aria-modal="true" aria-label="Al Faisaliah Tower"
-    aria-hidden="true">
-    <div class="lmodal__panel">
-      <button class="lmodal__close" type="button">Close</button>
-      <div class="lpoi">
-        <div></div>
-        <div class="lpoi__top">
-          <div class="lpoi__image"><span class="lpoi__ph"></span></div>
-          <p class="lpoi__title" role="heading" aria-level="2">Al Faisaliah Tower</p>
-        </div>
-        <p class="lpoi__desc">Riyadh’s first skyscraper, recognisable by its golden glass sphere, home to offices, a
-          hotel and fine dining above the Olaya skyline.</p>
-      </div>
-    </div>
-  </div>
-  <div class="lmodal lmodal--poi" id="boulevard" role="dialog" aria-modal="true" aria-label="Boulevard City"
-    aria-hidden="true">
-    <div class="lmodal__panel">
-      <button class="lmodal__close" type="button">Close</button>
-      <div class="lpoi">
-        <div></div>
-        <div class="lpoi__top">
-          <div class="lpoi__image"><span class="lpoi__ph"></span></div>
-          <p class="lpoi__title" role="heading" aria-level="2">Boulevard City</p>
-        </div>
-        <p class="lpoi__desc">An open-air entertainment district of promenades, restaurants, theatres and seasonal
-          events — the centre of Riyadh’s nightlife.</p>
-      </div>
-    </div>
-  </div>
-  <div class="lmodal lmodal--poi" id="masmak" role="dialog" aria-modal="true" aria-label="Al Masmak Fortress"
-    aria-hidden="true">
-    <div class="lmodal__panel">
-      <button class="lmodal__close" type="button">Close</button>
-      <div class="lpoi">
-        <div></div>
-        <div class="lpoi__top">
-          <div class="lpoi__image"><span class="lpoi__ph"></span></div>
-          <p class="lpoi__title" role="heading" aria-level="2">Al Masmak Fortress</p>
-        </div>
-        <p class="lpoi__desc">A clay-and-mudbrick fortress in old Riyadh, now a museum telling the story of the city’s
-          founding.</p>
-      </div>
-    </div>
-  </div>
-  <div class="lmodal lmodal--poi" id="stadium" role="dialog" aria-modal="true" aria-label="King Fahd Stadium"
-    aria-hidden="true">
-    <div class="lmodal__panel">
-      <button class="lmodal__close" type="button">Close</button>
-      <div class="lpoi">
-        <div></div>
-        <div class="lpoi__top">
-          <div class="lpoi__image"><span class="lpoi__ph"></span></div>
-          <p class="lpoi__title" role="heading" aria-level="2">King Fahd Stadium</p>
-        </div>
-        <p class="lpoi__desc">The national stadium, crowned by its iconic tensile-fabric roof, host to football’s
-          biggest matches and major concerts.</p>
-      </div>
-    </div>
-  </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>

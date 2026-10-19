@@ -779,7 +779,7 @@
   const pins = $$(".pin", map);
   const mapItems = $$(".map__list li");
 
-  gsap.fromTo(".map__img", { scale: 1.18 }, {
+  gsap.fromTo(".map__zoom", { scale: 1.18 }, {
     scale: 1, ease: "none",
     scrollTrigger: { trigger: map, start: "top bottom", end: "bottom 60%", scrub: true },
   });
@@ -792,26 +792,63 @@
     yPercent: 25, autoAlpha: 0, duration: 1.4, ease: "expo.out",
     scrollTrigger: { trigger: map, start: "top 60%" },
   });
-  gsap.from(mapItems, {
-    yPercent: 100, autoAlpha: 0, duration: 1.1, ease: "expo.out", stagger: 0.1, delay: 0.3,
+  gsap.from([".map__title", ...mapItems], {
+    yPercent: 100, autoAlpha: 0, duration: 1.1, ease: "expo.out", stagger: 0.06, delay: 0.3,
     scrollTrigger: { trigger: map, start: "top 60%" },
   });
 
+  // hover lights an area; clicking it flies the map there and keeps it lit until another is chosen
+  let active = null;
   const lightGroup = (g) => {
     map.classList.toggle("has-focus", g !== null);
     pins.forEach((p) => p.classList.toggle("is-lit", g !== null && p.dataset.group === g));
-    mapItems.forEach((li) => li.classList.toggle("is-lit", g !== null && li.dataset.group === g));
+    mapItems.forEach((li) => {
+      li.classList.toggle("is-lit", g !== null && li.dataset.group === g);
+      li.classList.toggle("is-active", active !== null && li.dataset.group === active);
+    });
   };
+  const world = $(".map__world"), mapCard = $(".map__card");
+  const pinLayer = $(".map__zoom");
+  const syncPinScale = () => { // pins aren't inside the zooming layer: move them with it, keep their size
+    pinLayer.style.setProperty("--ws", gsap.getProperty(world, "scale"));
+    pinLayer.style.setProperty("--wx", gsap.getProperty(world, "x") + "px");
+    pinLayer.style.setProperty("--wy", gsap.getProperty(world, "y") + "px");
+  };
+  const flyTo = (g) => {
+    active = g;
+    lightGroup(g);
+    if (g === null) return gsap.to(world, { x: 0, y: 0, scale: 1, duration: 1.2, ease: "expo.inOut", overwrite: true, onUpdate: syncPinScale });
+    const spots = pins.filter((p) => p.dataset.group === g);
+    const W = map.offsetWidth, H = map.offsetHeight;
+    const px = spots.reduce((t, p) => t + parseFloat(p.style.getPropertyValue("--x")), 0) / spots.length / 100 * W;
+    const py = spots.reduce((t, p) => t + parseFloat(p.style.getPropertyValue("--y")), 0) / spots.length / 100 * H;
+    // the part of the map actually on screen (and, on desktop, not under the card)
+    const mr = map.getBoundingClientRect(), cr = mapCard.getBoundingClientRect();
+    const phone = matchMedia("(max-width: 900px)").matches;
+    let L = Math.max(0, -mr.left), R = Math.min(W, innerWidth - mr.left);
+    if (!phone && cr.right > mr.left && cr.top < mr.bottom) L = Math.max(L, cr.right - mr.left + 16);
+    const s = phone ? 1.7 : 2.1;
+    const cx = (L + R) / 2, cy = phone ? H * 0.4 : H * 0.48;
+    const x = gsap.utils.clamp(R - W * s, L, cx - px * s); // never pull the map's edge into the visible window
+    const y = gsap.utils.clamp(H - H * s, 0, cy - py * s);
+    gsap.to(world, { x, y, scale: s, duration: 1.4, ease: "expo.inOut", overwrite: true, onUpdate: syncPinScale });
+  };
+  const toggle = (g) => flyTo(active === g ? null : g);
   mapItems.forEach((li) => {
-    li.addEventListener("pointerenter", () => lightGroup(li.dataset.group));
-    li.addEventListener("pointerleave", () => lightGroup(null));
+    const g = li.dataset.group, btn = $("button", li);
+    li.addEventListener("pointerenter", () => lightGroup(g));
+    li.addEventListener("pointerleave", () => lightGroup(active));
+    btn.addEventListener("click", () => !btn.disabled && toggle(g));
   });
   pins.forEach((p) => {
     p.addEventListener("pointerenter", () => { lightGroup(p.dataset.group); gsap.to(p, { scale: 1.35, duration: 0.5, ease: "back.out(3)" }); });
-    p.addEventListener("pointerleave", () => { lightGroup(null); gsap.to(p, { scale: 1, duration: 0.5, ease: "expo.out" }); });
+    p.addEventListener("pointerleave", () => { lightGroup(active); gsap.to(p, { scale: 1, duration: 0.5, ease: "expo.out" }); });
     p.addEventListener("focus", () => lightGroup(p.dataset.group));
-    p.addEventListener("blur", () => lightGroup(null));
+    p.addEventListener("blur", () => lightGroup(active));
+    p.addEventListener("click", () => toggle(p.dataset.group));
   });
+  addEventListener("keydown", (e) => e.key === "Escape" && active !== null && flyTo(null));
+  addEventListener("resize", () => active !== null && flyTo(active)); // keep the chosen area framed
 
   } // IS_HOME pillars → map
 
@@ -1312,11 +1349,20 @@
     });
     addEventListener("keydown", (e) => e.key === "Escape" && close());
     addEventListener("hashchange", () => { const id = location.hash.slice(1); id ? open(id, true) : close(); });
-    // deep link: /location.html#kafd opens that panel once the intro has played
+    // deep link: /location.html#kafd opens that panel once the intro has played. A project
+    // (e.g. #olyx, from "View on the map" on its page) first flies the camera to where the
+    // projects are in view — the Makkah shot for projects out there — then opens its panel
     if (location.hash && document.getElementById(location.hash.slice(1))?.classList.contains("lmodal")) {
       const id = location.hash.slice(1);
       history.replaceState(null, "", location.pathname);
-      setTimeout(() => open(id), 2600);
+      const proj = (window.BALANCE_PROJECTS || []).find((x) => x.id === id);
+      if (!proj || !proj.map) setTimeout(() => open(id), 2600);
+      else setTimeout(() => {
+        const st = loc.scrollTrigger, f = proj.map.x < 40 ? 0.9 : 0.7; // camera path: 0.64–0.78 holds on Riyadh, 0.9 is Makkah
+        const y = st.start + (st.end - st.start) * f;
+        if (smoother) smoother.scrollTo(y, true); else window.scrollTo({ top: y, behavior: "smooth" });
+        setTimeout(() => open(id), 1900);
+      }, 2400);
     }
   }
 
@@ -1344,7 +1390,16 @@
        handing over to the black page below */
     const setTheme = (light) => document.body.classList.toggle("theme-light", light);
     setTheme(true);
-    gsap.timeline({
+    if (hero.classList.contains("phx--single")) {
+      // one photo only: stays in light mode with no day → night change and no pinned pause;
+      // the header goes dark once the hero has scrolled away
+      gsap.to(".phx__cue", { autoAlpha: 0, ease: "none", scrollTrigger: { trigger: hero, start: "top top", end: "+=120", scrub: true } });
+      gsap.to(day, { scale: 1, ease: "none", scrollTrigger: { trigger: hero, start: "top top", end: "bottom top", scrub: true } });
+      ScrollTrigger.create({
+        trigger: hero, start: "top top", end: "bottom 80px",
+        onLeave: () => setTheme(false), onEnterBack: () => setTheme(true),
+      });
+    } else gsap.timeline({
       defaults: { ease: "none" },
       scrollTrigger: {
         trigger: hero, start: "top top", end: () => "+=" + innerHeight * 0.9, pin: true, scrub: 1,
@@ -1405,6 +1460,12 @@
       .to([".pext__title", ".pext__text"], { autoAlpha: 0, y: -30, duration: 0.3 }, 0.05)
       .to(".pext__card", { borderColor: "rgba(253,253,253,0)", duration: 0.4 }, 0.3);
     gsap.from(".pext__card", { y: 60, autoAlpha: 0, duration: 1.3, ease: "expo.out", scrollTrigger: { trigger: ".pext", start: "top 70%" } });
+    // the two renders under it wipe open upward as they arrive, the image settling from a slight zoom
+    $$(".pgal__item").forEach((fig, k) => {
+      const st = { trigger: fig, start: "top 88%" };
+      gsap.fromTo(fig, { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.3, ease: "expo.inOut", delay: k * 0.12, scrollTrigger: st });
+      gsap.fromTo($("img", fig), { scale: 1.25 }, { scale: 1, duration: 1.8, ease: "expo.out", delay: k * 0.12, scrollTrigger: st });
+    });
     gsap.from(".pext__label", { x: -20, autoAlpha: 0, duration: 1, ease: "expo.out", scrollTrigger: { trigger: ".pext", start: "top 80%" } });
 
     /* location: the line draws, then the map pins and its two panels swap */
@@ -1420,7 +1481,7 @@
         },
       },
     })
-      .fromTo(".ploc__map img", { scale: 1.12 }, { scale: 1, duration: 1 }, 0)
+      .fromTo(".ploc__world", { scale: 1.12, transformOrigin: () => { const w = $(".ploc__world"); return `${w.style.getPropertyValue("--px") * 100}% ${w.style.getPropertyValue("--py") * 100}%`; } }, { scale: 1, duration: 1 }, 0)
       .fromTo(".ploc__panel", { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.2, ease: "power2.out" }, 0)
       .to(".ploc__slide--a", { autoAlpha: 0, y: -24, duration: 0.15, ease: "power2.in" }, 0.45)
       .fromTo(".ploc__slide--b", { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.15, ease: "power2.out" }, 0.55);

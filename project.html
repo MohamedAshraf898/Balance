@@ -91,7 +91,6 @@
 
         <!-- EXTERIOR: the card's photo grows into the full-bleed image -->
         <section class="pext" aria-labelledby="pext-title">
-          <p class="pext__label"></p>
           <div class="pext__stage">
             <div class="pext__band" aria-hidden="true"><img alt=""></div>
             <div class="pext__card">
@@ -104,6 +103,9 @@
           </div>
         </section>
 
+        <!-- MORE EXTERIORS: two more renders under the full-screen photo (filled from js/projects-data.js) -->
+        <section class="pgal" aria-label="More exterior views"></section>
+
         <!-- PROJECT LOCATION -->
         <section class="ploc" aria-labelledby="ploc-title">
           <span class="ploc__line" aria-hidden="true"></span>
@@ -112,10 +114,10 @@
             <h2 class="ploc__title" id="ploc-title"></h2>
           </div>
           <div class="ploc__stage">
-            <div class="ploc__map"><img alt="" width="1880" height="837"></div>
+            <div class="ploc__map"></div>
             <div class="ploc__panel">
-              <div class="ploc__slide ploc__slide--a"><img alt="" width="934" height="586"></div>
-              <div class="ploc__slide ploc__slide--b"><img alt="" width="418" height="547"></div>
+              <div class="ploc__slide ploc__slide--a"></div>
+              <div class="ploc__slide ploc__slide--b"></div>
             </div>
             <div class="ploc__dots mono" aria-hidden="true"><span class="is-on">01</span><i></i><span>02</span></div>
           </div>
@@ -129,14 +131,15 @@
                 <h3 class="footer__title">NAVIGATION</h3>
                 <ul class="footer__links">
                   <li><a href="index.html" data-link>Home</a></li>
-                  <li><a href="index.html#about" data-link>About us</a></li>
                   <li><a href="projects.html" data-link>Our Projects</a></li>
                   <li><a href="location.html" data-link>Our Locations</a></li>
                 </ul>
               </div>
-              <div class="footer__block">
-                <h3 class="footer__title">CONTACT</h3>
+              <br><br>
+              <div class="footer__block" style="margin-top: 60px;">
                 <ul class="footer__links footer__links--contact">
+                  <!-- <h3 class="footer__title">CONTACT</h3> -->
+
                   <li>Email: ...................</li>
                   <li>Whatsapp: ...................</li>
                   <li>Social Media : ...................</li>
@@ -145,8 +148,9 @@
             </div>
 
             <form class="form" novalidate>
-              <h3 class="form__title">Balance Company Profile</h3>
-              <p class="form__sub">Lorem ipsumLorem ipsumLorem ipsumLorem ipsum</p>
+              <h3 class="form__title">Have a question about your next home?
+              </h3>
+              <p class="form__sub">Leave your details. Let’s talk.</p>
               <label class="field">
                 <span class="field__label">NAME</span>
                 <input type="text" name="name" autocomplete="name" required>
@@ -159,11 +163,9 @@
               </label>
               <div class="form__actions">
                 <button type="submit" class="btn-outline" value="callback"><span class="btn-outline__fill"></span><span
-                    class="btn-outline__text">REQUEST A CALL
-                    BACK</span></button>
+                    class="btn-outline__text">REQUEST A CALL BACK</span></button>
                 <button type="submit" class="btn-outline" value="appointment"><span
-                    class="btn-outline__fill"></span><span class="btn-outline__text">BOOK AN
-                    APOINTMENT</span></button>
+                    class="btn-outline__fill"></span><span class="btn-outline__text">BOOK AN APOINTMENT</span></button>
               </div>
               <p class="form__note">No spam, no obligation. your information is safe</p>
             </form>
