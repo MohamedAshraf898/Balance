@@ -4,6 +4,12 @@
    ========================================================================== */
 (() => {
   const list = window.BALANCE_PROJECTS || [];
+  const I = window.BALANCE_I18N || { AR: false, t: (x) => x, yearsUnit: (n, u) => u };
+  const t = I.t;
+  const ARROW = I.AR ? "←" : "→"; // "forward" points left in Arabic
+  const tpl = I.AR // composed labels (alt text, titles)
+    ? { site: (n) => `${n} — بالانس`, by: (n) => `${n} من بالانس`, ext: (n) => `${n} — الواجهة الخارجية`, view: (n, k) => `${n} — منظر خارجي ${k}`, map: (n) => `خريطة موقع ${n}` }
+    : { site: (n) => `${n} — Balance`, by: (n) => `${n} by Balance`, ext: (n) => `${n} exterior`, view: (n, k) => `${n} exterior view ${k}`, map: (n) => `Map of ${n}'s location` };
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
   const titleHTML = (name) => esc(name).split(" | ").join(' <span class="proj__bar">|</span> ');
   const lines = (d) => (Array.isArray(d) ? d : [d]).map(esc).join("<br>");
@@ -27,7 +33,7 @@
             : '<div class="proj__logo" style="--w:0;--h:0" aria-hidden="true"></div>' /* no logo: keep the row's spacing */}
           <h2 class="proj__title">${titleHTML(p.name)}</h2>
           <p class="proj__desc">${lines(p.description)}</p>
-          <a class="proj__more" href="${esc(projectPage(p))}">View project <span aria-hidden="true">→</span></a>
+          <a class="proj__more" href="${esc(projectPage(p))}">${t("View project")} <span aria-hidden="true">${ARROW}</span></a>
         </div>
       </article>`;
     }).join("") + '\n      <span class="proj__line proj__line--end" aria-hidden="true"><i class="proj__gem"></i></span>';
@@ -66,8 +72,8 @@
     if (!contact) return;
     const icon = (k) => `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">${ICONS[k] || ""}</svg>`;
     ul.innerHTML = [
-      contact.email && `<li>Email: <a href="mailto:${esc(contact.email)}">${esc(contact.email)}</a></li>`,
-      contact.phone && `<li>Whatsapp: <a href="https://wa.me/${esc(contact.whatsapp || contact.phone.replace(/\D/g, ""))}" target="_blank" rel="noopener" dir="ltr">${esc(contact.phone)}</a></li>`,
+      contact.email && `<li>${t("Email:")} <a href="mailto:${esc(contact.email)}">${esc(contact.email)}</a></li>`,
+      contact.phone && `<li>${t("Whatsapp:")} <a href="https://wa.me/${esc(contact.whatsapp || contact.phone.replace(/\D/g, ""))}" target="_blank" rel="noopener" dir="ltr">${esc(contact.phone)}</a></li>`,
       (contact.social || []).length && `<li class="footer__social">${contact.social.map((s) =>
         `<a href="${esc(s.url)}" target="_blank" rel="noopener" aria-label="${esc(s.name)}" title="${esc(s.name)}">${icon(s.icon)}</a>`).join("")}</li>`,
     ].filter(Boolean).join("");
@@ -114,14 +120,14 @@
     const set = (sel, html) => { const el = document.querySelector(sel); if (el) el.innerHTML = html; };
     const attr = (sel, name, val) => { const el = document.querySelector(sel); if (el && val != null) el.setAttribute(name, val); };
 
-    document.title = own.title || `${p.name} — Balance`;
+    document.title = own.title || tpl.site(p.name);
     phx.setAttribute("aria-label", p.name);
     // hero
     attr(".phx__img--day", "src", H.day);
     if (H.night) attr(".phx__img--night", "src", H.night);
     else phx.classList.add("phx--single"); // one photo only: no day → night transition
     if (H.position) document.querySelectorAll(".phx__img").forEach((img) => (img.style.objectPosition = H.position));
-    attr(".phx__img--day", "alt", (own.hero && own.hero.alt) || `${p.name} by Balance`);
+    attr(".phx__img--day", "alt", (own.hero && own.hero.alt) || tpl.by(p.name));
     set(".phx__lead", esc(H.lead));
     set(".phx__note", lines(H.note || ""));
     set(".phx__stats", (H.stats || []).map((s) => `<div class="phx__stat"><b>${esc(s.title)}</b><span>${esc(s.text)}</span></div>`).join(""));
@@ -138,7 +144,7 @@
       <div class="wcell${w.icon ? " wcell--icon" : ""}">
         ${w.icon ? `<img class="wcell__icon" src="${esc(w.icon)}" alt="" width="50" height="48">` : ""}
         <p class="wcell__label">${lines(w.label)}</p>
-        <p class="wcell__years"><span class="wcell__num" data-to="${+w.years || 0}">${+w.years || 0}</span> ${esc(w.unit || W.unit || "")}</p>
+        <p class="wcell__years"><span class="wcell__num" data-to="${+w.years || 0}">${+w.years || 0}</span> ${esc(I.yearsUnit(+w.years || 0, w.unit || W.unit || ""))}</p>
       </div>`).join(""));
     // exterior
     set(".pext__label", esc(E.label));
@@ -146,12 +152,12 @@
     set(".pext__text", esc(E.text));
     attr(".pext__band img", "src", E.band);
     attr(".pext__photo", "src", E.photo);
-    attr(".pext__photo", "alt", (own.exterior && own.exterior.alt) || `${p.name} exterior`);
+    attr(".pext__photo", "alt", (own.exterior && own.exterior.alt) || tpl.ext(p.name));
     const gal = document.querySelector(".pgal");
     if (gal) { // the other renders, side by side at one height (each sized by its own shape)
       const items = (E.gallery || []).map((g) => (typeof g === "string" ? { src: g } : g)).filter((g) => g.src);
       gal.innerHTML = items.map((g, k) => `<figure class="pgal__item" style="--r:${g.ratio || 1.5}"><img src="${esc(g.src)}"
-        alt="${esc(p.name)} exterior view ${k + 2}" loading="lazy" decoding="async"></figure>`).join("");
+        alt="${esc(tpl.view(p.name, k + 2))}" loading="lazy" decoding="async"></figure>`).join("");
       gal.hidden = !items.length;
     }
     // location — the locations-page map centred on this project, its landmarks + other projects
@@ -166,7 +172,7 @@
       const dot = (cls, m, name) => `<span class="ploc__dot ${cls}" style="--x:${m.x}%;--y:${m.y}%"><i></i><b>${esc(name)}</b></span>`;
       const logo = p.logo && p.logo.src;
       mapBox.innerHTML = `<div class="ploc__world" style="--px:${p.map.x / 100};--py:${p.map.y / 100}">
-        <img class="ploc__map-img" src="${MAP}" alt="Map of ${esc(p.name)}'s location" width="1823" height="863">
+        <img class="ploc__map-img" src="${MAP}" alt="${esc(tpl.map(p.name))}" width="1823" height="863">
         ${LM.map((l) => dot(l.type === "area" ? "ploc__dot--area" : "ploc__dot--landmark", l.map, l.name)).join("")}
         ${list.filter((x) => x !== p && x.map).map((x) => dot("ploc__dot--project", x.map, x.name)).join("")}
         <span class="pin is-lit${logo ? " pin--logo" : ""}" style="--x:${p.map.x}%;--y:${p.map.y}%"><img src="assets/svg/location.svg"
@@ -214,14 +220,14 @@
           <p class="ploc__about">${esc(p.about || (Array.isArray(p.description) ? p.description.join(" ") : p.description || ""))}</p>
         </div>`;
       slideB.innerHTML = `<div class="ploc__info">
-          <span class="ploc__tag">Nearby</span>
-          <ul class="ploc__near">${near.map(({ l }) => `<li><span>${esc(l.name)}</span><small>${l.type === "area" ? "Area" : "Landmark"}</small></li>`).join("")}</ul>
+          <span class="ploc__tag">${t("Nearby")}</span>
+          <ul class="ploc__near">${near.map(({ l }) => `<li><span>${esc(l.name)}</span><small>${t(l.type === "area" ? "Area" : "Landmark")}</small></li>`).join("")}</ul>
         </div>`;
     }
     // "View on the map" → the locations page, flown to this project with its panel open
     const panelEl = document.querySelector(".ploc__panel");
     if (panelEl && stage) panelEl.insertAdjacentHTML("beforeend",
-      `<a class="ploc__cta" href="location.html#${esc(p.id)}">View on the map <span aria-hidden="true">→</span></a>`);
+      `<a class="ploc__cta" href="location.html#${esc(p.id)}">${t("View on the map")} <span aria-hidden="true">${ARROW}</span></a>`);
   }
 
   /* Locations map — anchor (position), pin (label + logo) and side panel per project */
@@ -245,7 +251,7 @@
       document.body.insertAdjacentHTML("beforeend", `
         <div class="lmodal lmodal--poi" id="${esc(l.id)}" role="dialog" aria-modal="true" aria-label="${esc(l.name)}" aria-hidden="true">
           <div class="lmodal__panel">
-            <button class="lmodal__close" type="button">Close</button>
+            <button class="lmodal__close" type="button">${t("Close")}</button>
             <div class="lpoi">
               <div></div>
               <div class="lpoi__top">
@@ -269,7 +275,7 @@
       document.body.insertAdjacentHTML("beforeend", `
         <div class="lmodal lmodal--project" id="${esc(p.id)}" role="dialog" aria-modal="true" aria-label="${esc(p.name)}" aria-hidden="true">
           <div class="lmodal__panel">
-            <button class="lmodal__close" type="button">Close</button>
+            <button class="lmodal__close" type="button">${t("Close")}</button>
             <div class="lproj">
               <div class="lproj__image lmodal__side-image"><span class="lproj__ph">${logoSrc ? `<img src="${esc(logoSrc)}" alt="">` : ""}</span></div>
               <div class="lproj__content">
@@ -281,7 +287,7 @@
                 <p class="lproj__tagline">${esc(p.tagline || "")}</p>
                 <div class="lproj__bottom">
                   <p>${esc(p.about || (Array.isArray(p.description) ? p.description.join(" ") : p.description))}</p>
-                  <a class="lproj__link" href="${esc(projectPage(p))}">View project <span aria-hidden="true">→</span></a>
+                  <a class="lproj__link" href="${esc(projectPage(p))}">${t("View project")} <span aria-hidden="true">${ARROW}</span></a>
                 </div>
               </div>
             </div>

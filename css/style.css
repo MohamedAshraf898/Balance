@@ -39,7 +39,7 @@ body {
 }
 
 body {
-  font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-family: "Inter", "IBM Plex Sans Arabic", system-ui, -apple-system, "Segoe UI", sans-serif;
   color: var(--white);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -609,7 +609,7 @@ button {
 }
 
 .mono {
-  font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-family: "Inter", "IBM Plex Sans Arabic", system-ui, -apple-system, "Segoe UI", sans-serif;
   font-size: max(11px, calc(12 * var(--u)));
   font-weight: 400;
   letter-spacing: .04em;
@@ -2269,7 +2269,7 @@ button {
   top: 50%;
   z-index: 3;
   transform: translate(-50%, -50%);
-  font-family: "Inter", system-ui, sans-serif; /* same family as the other pages */
+  font-family: "Inter", "IBM Plex Sans Arabic", system-ui, sans-serif; /* same family as the other pages */
   font-weight: 600;
   font-size: clamp(44px, 8vw, 128px);
   line-height: 1;
@@ -2716,7 +2716,7 @@ button {
   max-width: 330px;
   position: relative;
   text-align: center;
-  font-family: "Inter", system-ui, sans-serif;
+  font-family: "Inter", "IBM Plex Sans Arabic", system-ui, sans-serif;
   font-weight: 600;
   font-size: clamp(30px, 3.2vw, 48px);
   line-height: 1.05;
@@ -2770,7 +2770,7 @@ button {
 }
 
 .lproj__title {
-  font-family: "Inter", system-ui, sans-serif;
+  font-family: "Inter", "IBM Plex Sans Arabic", system-ui, sans-serif;
   font-weight: 600;
   font-size: clamp(32px, 3.8vw, 60px);
   line-height: 1.05;
@@ -4558,6 +4558,92 @@ body.theme-light .header.is-scrolled {
     text-align: center;
     padding: 0 20px;
   }
+}
+
+/* ==========================================================================
+   Languages — EN / ع switch + Arabic (right-to-left) mode
+   ========================================================================== */
+.lang-switch {
+  align-self: center;
+  min-width: 34px;
+  height: 26px;
+  padding: 0 8px;
+  border: 1px solid rgba(255, 255, 255, .45);
+  border-radius: 13px;
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: .04em;
+  color: inherit;
+  transition: background-color .4s, color .4s, border-color .4s;
+}
+
+.lang-switch:hover {
+  background: var(--white);
+  border-color: var(--white);
+  color: var(--black);
+}
+
+.lang-switch:lang(ar) {
+  font-family: "IBM Plex Sans Arabic", sans-serif;
+  font-size: 14px;
+}
+
+body.theme-light .lang-switch {
+  border-color: rgba(20, 20, 20, .45);
+}
+
+/* nothing may widen the page sideways: in right-to-left the wide map/flame overflow
+   to the left, which phones would otherwise turn into a wider, shifted page */
+html,
+body {
+  overflow-x: clip;
+}
+
+/* Arabic is cursive: letter-spacing pulls the joined letters apart */
+html[lang="ar"] body,
+html[lang="ar"] body * {
+  letter-spacing: 0 !important;
+}
+
+html[lang="ar"] body {
+  font-family: "IBM Plex Sans Arabic", "Inter", system-ui, sans-serif;
+}
+
+/* Arabic: blocks the design places on the left move to the right (mirrored layout) */
+html[dir="rtl"] .header { padding-left: calc(56 * var(--u)); padding-right: calc(69 * var(--u)); }
+html[dir="rtl"] .hero__content { left: auto; right: var(--gutter); }
+html[dir="rtl"] .pillars__label { left: auto; right: var(--gutter); }
+html[dir="rtl"] .label { padding-left: 0; padding-right: var(--gutter); }
+html[dir="rtl"] .map__card { left: auto; right: calc(57 * var(--u)); }
+html[dir="rtl"] .pext__label { padding-left: 0; padding-right: calc(38 * var(--u)); }
+html[dir="rtl"] .footer__links a:hover { transform: translateX(-6px); }
+html[dir="rtl"] .phx__lead { left: auto; right: calc(69 * var(--u)); }
+html[dir="rtl"] .phx__note { right: auto; left: calc(69 * var(--u)); text-align: left; }
+html[dir="rtl"] .phx__stat { text-align: right; }
+html[dir="rtl"] .phx__stat:nth-child(3) { text-align: left; }
+html[dir="rtl"] .carousel__logo { padding-right: 0; border-right: 0; padding-left: calc(var(--cw) * 16 / 641); border-left: 1px solid rgba(255, 255, 255, .45); }
+
+@media (max-width: 900px) {
+  html[dir="rtl"] .header { padding-left: 20px; padding-right: 20px; }
+  html[dir="rtl"] .hero__content { left: 20px; right: 20px; }
+  html[dir="rtl"] .pillars__label { left: auto; right: 20px; }
+  html[dir="rtl"] .map__card { right: auto; }
+  html[dir="rtl"] .phx__lead { left: 20px; right: 20px; }
+  html[dir="rtl"] .phx__note { left: auto; right: 20px; text-align: right; }
+  html[dir="rtl"] .phx__stat,
+  html[dir="rtl"] .phx__stat:nth-child(3) { text-align: right; }
+}
+
+/* pieces positioned/animated in left-to-right coordinates keep that direction
+   (their text still reads right-to-left) */
+html[dir="rtl"] :is(.logos__viewport, .carousel, .projects__progress, .locations, .map, .loc__stage, .ploc__map,
+  .ticker, .footer__mark, .plist__stage, .phero__frame, .pext__stage, .proj__line, .loader) {
+  direction: ltr;
+}
+
+/* …but the text inside them reads right-to-left (keeps punctuation on the correct side) */
+html[dir="rtl"] :is(.carousel__info, .pext__card, .lpin__label, .ploc__dot b, .pin__tip, .pgal, .map__card) {
+  direction: rtl;
 }
 
 @media (prefers-reduced-motion: reduce) {

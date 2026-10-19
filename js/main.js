@@ -8,6 +8,8 @@
   if ("scrollRestoration" in history) history.scrollRestoration = "manual";
   window.scrollTo(0, 0);
 
+  const t = window.t || ((x) => x);
+  const CH = (window.BALANCE_I18N && window.BALANCE_I18N.SPLIT_CHARS) || "chars"; // "words" in Arabic (keeps letters joined)
   const $ = (s, c = document) => c.querySelector(s);
   const $$ = (s, c = document) => [...c.querySelectorAll(s)];
   const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -537,7 +539,7 @@
 
   // keyboard
   logos.tabIndex = 0;
-  logos.setAttribute("aria-label", "Our brands — drag, swipe or use arrow keys to scroll");
+  logos.setAttribute("aria-label", t("Our brands — drag, swipe or use arrow keys to scroll"));
   logos.addEventListener("keydown", (e) => {
     if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
     e.preventDefault();
@@ -557,8 +559,8 @@
      --------------------------------------------------------------------- */
   document.fonts?.ready.then(() => {
     $$(".about__title, .label").forEach((el) => {
-      const split = SplitText.create(el, { type: "chars", mask: "chars" });
-      gsap.from(split.chars, {
+      const split = SplitText.create(el, { type: CH, mask: CH });
+      gsap.from(split[CH], {
         yPercent: 110, duration: 1, ease: "expo.out", stagger: 0.025,
         scrollTrigger: { trigger: el, start: "top 88%" },
       });
@@ -763,7 +765,7 @@
   carousel.addEventListener("pointerup", endDrag);
   carousel.addEventListener("pointercancel", endDrag);
   carousel.tabIndex = 0;
-  carousel.setAttribute("aria-label", "Projects carousel — use arrow keys");
+  carousel.setAttribute("aria-label", t("Projects carousel — use arrow keys"));
   carousel.addEventListener("keydown", (e) => {
     if (e.key === "ArrowRight") { e.preventDefault(); goTo(Math.round(state.pos) + 1); }
     if (e.key === "ArrowLeft") { e.preventDefault(); goTo(Math.round(state.pos) - 1); }
@@ -880,7 +882,7 @@
     gsap.set(".phero__rule", { scaleX: 0 });
 
     pageIntro = () => {
-      const chars = SplitText.create(pTitle, { type: "chars", mask: "chars" }).chars;
+      const chars = SplitText.create(pTitle, { type: CH, mask: CH })[CH];
       const lines = SplitText.create(pText, { type: "lines", mask: "lines" }).lines;
       gsap.set([pTitle, pText], { autoAlpha: 1 });
       const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
@@ -1300,7 +1302,7 @@
     revealPins(0);
 
     pageIntro = () => {
-      const chars = SplitText.create(title, { type: "chars", mask: "chars" }).chars;
+      const chars = SplitText.create(title, { type: CH, mask: CH })[CH];
       const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
       tl.to(intro, { s: 0, rz: 0, rx: 0, duration: 3, ease: "power3.out", onUpdate: applyCam }, 0)
         .from(clouds, { opacity: 0, scale: 1.4, duration: 2.6, stagger: 0.08, ease: "power2.out" }, 0)
@@ -1429,9 +1431,9 @@
         const l = SplitText.create(p, { type: "lines", mask: "lines" }).lines;
         gsap.from(l, { yPercent: 110, duration: 1.1, ease: "expo.out", stagger: 0.05, scrollTrigger: { trigger: p, start: "top 88%" } });
       });
-      const wChars = SplitText.create(".pwar__title", { type: "chars", mask: "chars" }).chars;
+      const wChars = SplitText.create(".pwar__title", { type: CH, mask: CH })[CH];
       gsap.from(wChars, { yPercent: 110, duration: 1.1, ease: "expo.out", stagger: 0.035, scrollTrigger: { trigger: ".pwar__title", start: "top 85%" } });
-      const pTitle = SplitText.create(".ploc__title", { type: "chars", mask: "chars" }).chars;
+      const pTitle = SplitText.create(".ploc__title", { type: CH, mask: CH })[CH];
       gsap.from(pTitle, { yPercent: 110, duration: 1.1, ease: "expo.out", stagger: 0.03, scrollTrigger: { trigger: ".ploc__title", start: "top 85%" } });
     });
     gsap.from(".pabout__label", { y: 16, autoAlpha: 0, duration: 1, ease: "expo.out", scrollTrigger: { trigger: ".pabout", start: "top 80%" } });
@@ -1563,9 +1565,9 @@
       f.classList.toggle("is-invalid", !valid);
       if (!valid) { ok = false; gsap.fromTo(f, { x: -8 }, { x: 0, duration: 0.6, ease: "elastic.out(1, 0.3)" }); }
     });
-    if (!ok) { note.textContent = "Please enter your name and a valid email."; note.classList.remove("is-ok"); return; }
+    if (!ok) { note.textContent = t("Please enter your name and a valid email."); note.classList.remove("is-ok"); return; }
     const kind = submitter && submitter.value === "appointment" ? "appointment request" : "call-back request";
-    note.textContent = `Thank you — your ${kind} has been received.`;
+    note.textContent = t(`Thank you — your ${kind} has been received.`);
     note.classList.add("is-ok");
     form.reset();
     setTimeout(() => { note.textContent = noteDefault; note.classList.remove("is-ok"); }, 5000);
