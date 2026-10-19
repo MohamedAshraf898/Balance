@@ -56,7 +56,10 @@
     if (loaderBar) gsap.set(loaderBar, { scaleX: p / 100 });
   };
 
-  const imgs = $$("img").filter((i) => !i.closest(".loader"));
+  // only wait for what's on the first screen — lazy images (and anything further down) load in the
+  // background, otherwise the loader sat on its timeout every time
+  const imgs = $$("img").filter((i) => !i.closest(".loader") && i.loading !== "lazy" && i.getAttribute("src")
+    && i.getBoundingClientRect().top < innerHeight * 1.2 && i.getBoundingClientRect().bottom > -innerHeight * .2);
   let loaded = 0;
   const progress = { v: 0 };
   const loadPromise = new Promise((resolve) => {
@@ -66,7 +69,7 @@
       else { img.addEventListener("load", tick, { once: true }); img.addEventListener("error", tick, { once: true }); }
     });
     if (!imgs.length) resolve();
-    setTimeout(resolve, 5000); // never hang
+    setTimeout(resolve, 2500); // never hang
   });
 
   gsap.to(loaderMark, { yPercent: -105, duration: 1.1, ease: "expo.out", delay: 0.15 });
@@ -906,6 +909,7 @@
     })
       .fromTo(panel, { clipPath: cardClip }, { clipPath: "inset(0px 0px 0px 0px)", ease: "power2.inOut", duration: 1, immediateRender: false }, 0)
       .to(media, { scale: 1.22, duration: 1 }, 0)
+      .to([media, ".phero .hero__fire"], { autoAlpha: 0, duration: 0.04 }, 0.97) // panel is full: hide what's behind it (no edge sliver)
       .to(".phero__fade", { autoAlpha: 0, duration: 0.6 }, 0)
       .to(card, { yPercent: -104, duration: 1, ease: "power1.in" }, 0.25) // text drifts up as the panel takes over
       .to(".phero__rule", { scaleX: 2.2, duration: 0.6, ease: "power2.inOut" }, 0.1);

@@ -446,15 +446,6 @@ button {
   justify-content: space-between;
 }
 
-.hero__tag {
-  font-size: max(16px, calc(20 * var(--u)));
-  transition: color .4s;
-}
-
-.hero__tag:hover {
-  color: var(--orange);
-}
-
 /* Pill button — 179×41.6 · border 1.216 · radius 30.4 · 20px #f5f5f5 */
 .btn-pill {
   position: relative;
@@ -491,6 +482,24 @@ button {
 
 .btn-pill:hover .btn-pill__fill {
   transform: none;
+}
+
+/* filled variant (Explore Projects): white pill, black text; hover drains the fill to the outline */
+.btn-pill--solid {
+  color: var(--black);
+  font-weight: 500;
+}
+
+.btn-pill--solid .btn-pill__fill {
+  transform: none;
+}
+
+.btn-pill--solid:hover {
+  color: var(--soft);
+}
+
+.btn-pill--solid:hover .btn-pill__fill {
+  transform: translateY(-101%);
 }
 
 /* ==========================================================================
@@ -2260,11 +2269,11 @@ button {
   top: 50%;
   z-index: 3;
   transform: translate(-50%, -50%);
-  font-family: "Cormorant Garamond", "Times New Roman", serif;
-  font-weight: 300;
-  font-size: clamp(56px, 9.4vw, 150px);
+  font-family: "Inter", system-ui, sans-serif; /* same family as the other pages */
+  font-weight: 600;
+  font-size: clamp(44px, 8vw, 128px);
   line-height: 1;
-  letter-spacing: .02em;
+  letter-spacing: .01em;
   text-transform: uppercase;
   color: #f5f5f5;
   pointer-events: none;
@@ -2707,10 +2716,10 @@ button {
   max-width: 330px;
   position: relative;
   text-align: center;
-  font-family: "Cormorant Garamond", serif;
-  font-weight: 300;
-  font-size: clamp(40px, 4.2vw, 64px);
-  line-height: .95;
+  font-family: "Inter", system-ui, sans-serif;
+  font-weight: 600;
+  font-size: clamp(30px, 3.2vw, 48px);
+  line-height: 1.05;
   text-transform: uppercase;
 }
 
@@ -2761,10 +2770,10 @@ button {
 }
 
 .lproj__title {
-  font-family: "Cormorant Garamond", serif;
-  font-weight: 300;
-  font-size: clamp(44px, 5.2vw, 84px);
-  line-height: .95;
+  font-family: "Inter", system-ui, sans-serif;
+  font-weight: 600;
+  font-size: clamp(32px, 3.8vw, 60px);
+  line-height: 1.05;
   text-transform: uppercase;
 }
 
@@ -2854,7 +2863,8 @@ button {
 }
 
 .phx--single .phx__img--night {
-  display: none; /* only a day photo for this project */
+  display: none;
+  /* only a day photo for this project */
 }
 
 .phx__img--day {
@@ -3401,7 +3411,8 @@ button {
 }
 
 .ploc__dot.is-hidden {
-  display: none; /* would cover a label already placed (see declutterMap in projects.js) */
+  display: none;
+  /* would cover a label already placed (see declutterMap in projects.js) */
 }
 
 .ploc__dot--area b {
@@ -3687,10 +3698,6 @@ body.theme-light .header.is-scrolled {
     left: calc(18 * var(--m));
     right: calc(18 * var(--m));
     bottom: calc(56 * var(--m));
-  }
-
-  .hero__tag {
-    font-size: max(12px, calc(7.857 * var(--m)));
   }
 
   /* Figma shows the flame sharp at .62 — no cursor on touch, so drop the burn-through mask */
@@ -4009,25 +4016,42 @@ body.theme-light .header.is-scrolled {
 }
 
 @media (max-width: 900px) {
+
+  /* phone hero: name block on top, paragraph, then Location · Developer · Year in a row */
+  .phx__note {
+    display: block;
+    right: auto;
+    left: 20px;
+    top: 96px;
+    bottom: auto;
+    text-align: left;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .phx__note::first-line {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: .02em;
+  }
+
   .phx__lead {
     left: 20px;
     right: 20px;
     width: auto;
-    bottom: 210px;
+    bottom: 172px;
     transform: none;
     font-size: 15px;
-  }
-
-  .phx__note {
-    display: none;
+    line-height: 1.45;
   }
 
   .phx__stats {
     left: 20px;
     right: 20px;
-    bottom: 64px;
-    grid-template-columns: 1fr;
-    gap: 18px;
+    bottom: 84px;
+    /* clear of the "Explore" cue */
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: 12px;
   }
 
   .phx__stat,
@@ -4036,10 +4060,6 @@ body.theme-light .header.is-scrolled {
     text-align: left;
     gap: 4px;
     font-size: 13px;
-  }
-
-  .phx__stat:nth-child(n+2) {
-    display: none;
   }
 
   .pabout {
@@ -4081,7 +4101,8 @@ body.theme-light .header.is-scrolled {
   }
 
   .pgal__item {
-    flex: none; /* stacked: full width, height from the image's own shape */
+    flex: none;
+    /* stacked: full width, height from the image's own shape */
     width: 100%;
   }
 
@@ -4144,6 +4165,398 @@ body.theme-light .header.is-scrolled {
     right: 20px;
     top: auto;
     bottom: 36px;
+  }
+}
+
+/* ==========================================================================
+   Phone polish — the phone layout is the desktop design scaled to the screen,
+   which left text tiny and sections floating in empty space. These rules only
+   resize / reflow; every animation keeps running on the same elements.
+   ========================================================================== */
+@media (max-width: 900px) {
+
+  /* home hero: fills the first screen together with the logo band — flame across the top,
+     headline + copy + buttons stacked in the lower half at phone-readable sizes */
+  .hero {
+    height: calc(100svh - 41.1 * var(--m));
+    min-height: 560px;
+  }
+
+  /* + the original logo band = one screen */
+  .hero__media {
+    left: -45%;
+    top: -4%;
+    width: 190%;
+    height: 64%;
+  }
+
+  .hero__content {
+    left: 20px;
+    right: 20px;
+    width: auto;
+    top: auto;
+    bottom: 250px;
+  }
+
+  .hero__title {
+    font-size: clamp(30px, 8.6vw, 38px);
+    line-height: 1.12;
+    max-width: 11em;
+  }
+
+  .hero__text {
+    margin-top: 16px;
+    font-size: 15px;
+    line-height: 1.5;
+    max-width: 30em;
+  }
+
+  .hero__bottom {
+    left: 20px;
+    right: 20px;
+    bottom: 44px;
+    gap: 12px;
+    justify-content: flex-start;
+  }
+
+  .hero__bottom .btn-pill {
+    padding: 12px 22px;
+    font-size: 15px;
+    border-width: 1px;
+  }
+
+  .hero__bottom .btn-pill:not(.btn-pill--solid) {
+    margin-left: auto;
+  }
+
+  /* section labels / about (home) */
+  .label {
+    font-size: 13px;
+    letter-spacing: .04em;
+  }
+
+  .about__title {
+    font-size: 22px;
+  }
+
+  .about__text {
+    font-size: 17px;
+    line-height: 1.4;
+  }
+
+  .projects {
+    padding-top: 64px;
+  }
+
+  /* pillars: label + list on top, a big ring in the middle, ticker underneath */
+  .pillars__pin {
+    --ring: min(72vw, 40svh);
+  }
+
+  .pillars__label {
+    top: 84px;
+    left: 20px;
+    font-size: 13px;
+  }
+
+  .pillars__grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+    padding: 118px 20px 7svh;
+    align-items: center;
+  }
+
+  .pillars__left {
+    grid-row: 1;
+    grid-column: 1;
+    align-self: start;
+    padding-top: 0;
+  }
+
+  .pillars__center {
+    grid-row: 2;
+    grid-column: 1;
+    height: auto;
+  }
+
+  .pillars__right {
+    grid-row: 3;
+    grid-column: 1;
+    justify-self: center;
+    align-self: end;
+    padding-top: 0;
+    font-size: 12px;
+  }
+
+  .pillars__kicker {
+    font-size: 12px;
+  }
+
+  .pillars__list {
+    margin-top: 10px;
+  }
+
+  .pillars__list li {
+    font-size: 22px;
+  }
+
+  /* projects carousel: phone-sized cards and a readable caption */
+  .carousel {
+    --cw: min(80vw, 380px);
+    --ch: var(--cw);
+    margin-top: 28px;
+  }
+
+  /* square cards fill the phone screen */
+  .carousel__info {
+    left: 16px;
+    right: 16px;
+    bottom: 14px;
+    gap: 12px;
+  }
+
+  .carousel__logo {
+    height: 30px;
+    max-width: 72px;
+    padding-right: 12px;
+  }
+
+  .carousel__name {
+    font-size: 16px;
+  }
+
+  .carousel__area {
+    font-size: 12px;
+    margin-top: 3px;
+  }
+
+  .projects__progress {
+    margin-top: 26px;
+    font-size: 12px;
+  }
+
+  .label--locations {
+    padding-top: 72px;
+  }
+
+  /* home map card: two columns of areas, bigger text */
+  .map__card {
+    width: auto;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding: 18px 16px 20px;
+  }
+
+  .map__title {
+    font-size: 15px;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+  }
+
+  .map__list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 12px;
+  }
+
+  .map__list button {
+    font-size: 15px;
+    line-height: 1.9;
+  }
+
+  /* footer (every page): one column — navigation + contact, then the form full width */
+  .footer {
+    padding-top: 56px;
+  }
+
+  .footer__cols,
+  [data-page="home"] .footer__cols {
+    grid-template-columns: 1fr;
+    padding: 0 20px;
+    row-gap: 36px;
+  }
+
+  .footer__info {
+    padding-top: 0;
+  }
+
+  .footer__info>br {
+    display: none;
+  }
+
+  .footer__info .footer__block+.footer__block {
+    margin-top: 28px !important;
+  }
+
+  /* overrides the inline 60px gap */
+  .footer__title {
+    font-size: 18px;
+  }
+
+  .footer__links {
+    margin-top: 10px;
+  }
+
+  .footer__links li {
+    font-size: 16px;
+  }
+
+  .footer__links li+li {
+    margin-top: 8px;
+  }
+
+  .footer__links--contact li+li {
+    margin-top: 10px;
+  }
+
+  .footer__links .footer__social a {
+    width: 42px;
+    height: 42px;
+  }
+
+  .form {
+    padding: 28px 20px 24px;
+  }
+
+  .form__title {
+    font-size: 20px;
+  }
+
+  .form__sub {
+    font-size: 14px;
+    margin-top: 10px;
+  }
+
+  .field {
+    margin-top: 26px;
+  }
+
+  .field+.field {
+    margin-top: 16px;
+  }
+
+  .field__label {
+    font-size: 12px;
+  }
+
+  .field input {
+    height: 44px;
+  }
+
+  .form__actions {
+    gap: 10px;
+    margin-top: 24px;
+  }
+
+  .btn-outline {
+    width: 100%;
+    max-width: none;
+    min-height: 48px;
+    border-radius: 24px;
+    font-size: 12px;
+    letter-spacing: .06em;
+  }
+
+  .form__actions {
+    padding-left: 0;
+  }
+
+  .form__note {
+    font-size: 11px;
+    margin-top: 18px;
+  }
+
+  .footer__mark {
+    margin-top: 48px;
+  }
+
+  /* projects page rows: readable titles / text, bigger logos */
+  .proj {
+    padding-top: 28px;
+    padding-bottom: 24px;
+  }
+
+  .proj__logo {
+    width: calc(var(--w) * var(--u) * 1.7);
+    height: calc(var(--h) * var(--u) * 1.7);
+    margin-bottom: calc((var(--slot, 110) - var(--h)) * var(--u) * 1.7);
+  }
+
+  .proj__title {
+    font-size: 20px;
+    margin-top: 14px;
+  }
+
+  .proj__desc {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-top: 10px;
+  }
+
+  .proj__more {
+    font-size: 11px;
+    margin-top: 14px;
+  }
+
+  /* projects page hero card: readable intro text (the card grows to fit it) */
+  /* full-screen hero (like desktop): a shorter hero left the pin's scroll space as a black gap below it */
+  .phero {
+    --cw: calc(100vw - 40px);
+    --ch: max(340px, calc(340 * var(--m)));
+    --cy: 50%;
+    height: 100svh;
+    min-height: 560px;
+  }
+
+  .phero__card {
+    top: 50%;
+  }
+
+  .phero__bg {
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    transform: none;
+  }
+
+  .phero__card {
+    width: calc(100vw - 80px);
+  }
+
+  .phero__title {
+    font-size: 28px;
+  }
+
+  .phero__text {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  /* project page: headings sized for a phone (no words broken in half) */
+  .pabout__title {
+    font-size: 32px;
+    line-height: 1.2;
+  }
+
+  .pabout__text {
+    font-size: 17px;
+    line-height: 1.5;
+  }
+
+  .pwar__title {
+    font-size: 40px;
+  }
+
+  .pwar__text {
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .ploc__title {
+    font-size: 30px;
+    text-align: center;
+    padding: 0 20px;
   }
 }
 
