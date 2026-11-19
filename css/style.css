@@ -396,8 +396,10 @@ button {
   --mx: -999px;
   --my: -999px;
   --r: 0px;
-  -webkit-mask-image: radial-gradient(circle var(--r) at var(--mx) var(--my), #000 0%, rgba(0, 0, 0, .72) 38%, rgba(0, 0, 0, .25) 68%, transparent 100%);
-  mask-image: radial-gradient(circle var(--r) at var(--mx) var(--my), #000 0%, rgba(0, 0, 0, .72) 38%, rgba(0, 0, 0, .25) 68%, transparent 100%);
+  /* second layer keeps the sharp flame visible at rest (~.62 like Figma);
+     the cursor circle brightens it to full around the pointer */
+  -webkit-mask-image: radial-gradient(circle var(--r) at var(--mx) var(--my), #000 0%, rgba(0, 0, 0, .72) 38%, rgba(0, 0, 0, .25) 68%, transparent 100%), linear-gradient(rgba(0, 0, 0, .65), rgba(0, 0, 0, .65));
+  mask-image: radial-gradient(circle var(--r) at var(--mx) var(--my), #000 0%, rgba(0, 0, 0, .72) 38%, rgba(0, 0, 0, .25) 68%, transparent 100%), linear-gradient(rgba(0, 0, 0, .65), rgba(0, 0, 0, .65));
 }
 
 .hero__fire {
